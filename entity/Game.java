@@ -14,6 +14,10 @@ public class Game {
     private Player playerTwo;
     private PlayerManager playerManager;
     private boolean showTitle;
+    private final static int PLAY_AS_HOST = 1;
+    private final static int PLAY_AS_CLIENT=2;
+    private final static int SHOW_INSTRUCTIONS=3;
+    private final static int EXIT_GAME=4;
 
     public Game() {
         this.showTitle=true;
@@ -68,10 +72,7 @@ public class Game {
 
 
     public void execute(){
-        final int PLAY_AS_HOST = 1;
-        final int PLAY_AS_CLIENT=2;
-        final int SHOW_INSTRUCTIONS=3;
-        final int EXIT_GAME=4;
+
         int action=showOptions();
 
         if(action<PLAY_AS_HOST || action>EXIT_GAME){

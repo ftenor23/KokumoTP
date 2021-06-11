@@ -24,12 +24,16 @@ public class AttackManager {
     }
 
     private boolean attack(Player me, Player enemy, int id, int position) {
-        if (!attackValidator.soldierCanMove(me, id)) {
-            setCanMove(me,id);
+        if(attackValidator.positionOutOfBounds(position)){
+            return false;
         }
         if (attackValidator.zoneIsImpassable(enemy, position)) {
             attackGraphics.attackToImpassableZone();
             return false;
+        }
+
+        if (!attackValidator.soldierCanMove(me, id)) {
+            setCanMove(me,id);
         }
         if (attackValidator.positionIsOccupied(enemy, position)) {
             attackGraphics.enemyAttacked();
@@ -44,4 +48,5 @@ public class AttackManager {
     public void attackReceived(Player enemy, int position){
         boardManager.attackReceived(enemy.getBoard(), position);
     }
+
 }

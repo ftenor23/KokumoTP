@@ -1,15 +1,16 @@
 package TP_Bis.SERVERS_Y_CLIENTES;
 import TP_Bis.Manager.GameManager;
 import TP_Bis.Manager.PlayerManager;
-import TP_Bis.entity.Boards;
+import TP_Bis.entity.Data;
 import TP_Bis.entity.Player;
 import TP_Bis.entity.Players;
 import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
-public class Server {
+public class Server{
     public static final int PORT = 4444;
 
     public static void main(String[] args) throws IOException {
@@ -26,12 +27,13 @@ public class Server {
         BufferedReader entrada = null;
         PrintWriter salida = null;
 
-        System.out.println("Escuchando: " + socketServidor);
+        //System.out.println("Escuchando: " + socketServidor);
+        System.out.println("Esperando al cliente...");
         try {
             // Se bloquea hasta que recibe alguna petición de un cliente
             // abriendo un socket para el cliente
             socketCliente = socketServidor.accept();
-            System.out.println("Connexión acceptada: "+ socketCliente);
+            System.out.println("Conexión aceptada: "/*+ socketCliente*/);
             // Establece canal de entrada
             entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
             // Establece canal de salida
@@ -39,44 +41,86 @@ public class Server {
                     OutputStreamWriter(socketCliente.getOutputStream())),true);
 
             // Hace eco de lo que le proporciona el cliente, hasta que recibe "Adios"
-            Player host= new Player("chinwenwencha");
-            Player client = new Player("client");
-            Players players = null;
+            Scanner in = new Scanner(System.in);
+            System.out.println("Ingrese su nombre:");
+            String hostName= in.nextLine();
+            Player host= new Player(hostName);
+            Player client = new Player(" ");
             PlayerManager playerManager=new PlayerManager();
-            Boards boards=new Boards();
-            boolean gameOver;
+            Data data =new Data();
+            boolean gameOver=false;
+            boolean firstTurn=true;
             while (true) {
                 //Scanner in = new Scanner(System.in);
-                String str = entrada.readLine();
-                System.out.println(str);
-                //System.out.println("Cliente: " + str);
                 Gson gson = new Gson();
-                /* = gson.fromJson(str,Player.class);
-                host.getMyBoard().printOwnBoard();*/
-                boards = gson.fromJson(str,Boards.class);
-                client.setMyBoard(boards.getClientBoard());
-                client.getBoard().printOwnBoard();
-                gameOver = playerManager.turn(host,client);
-                boards.setHostBoard(host.getBoard());
-                boards.setClientBoard(client.getBoard());
+                String str = entrada.readLine();
+                //System.out.println(str);
+                //System.out.println("Cliente: " + str);
+                data = gson.fromJson(str, Data.class);
+                host.setMyBoard(data.getHostBoard());
+                client.setMyBoard(data.getClientBoard());
+                gameOver = data.isGameOver();
 
-                str = gson.toJson(boards);
-                //str = in.nextLine();
-                salida.println(str);
-                System.out.println("Esperando turno del cliente...");
                 if (gameOver){
                     System.out.println("Juego terminado");
                     if(hostWon(host,client)){
                         System.out.println("Ganaste!");
                     }
                     else{
-                        System.out.println("Perdiste!");
+                        System.out.println("Perdiste, gano " + client.getPlayerName() + "!!");
                     }
+                    //gameOver = playerManager.turn(host,client);
+                    data.setHostBoard(host.getBoard());
+                    data.setClientBoard(client.getBoard());
+                    data.setGameOver(gameOver);
+
+                    str = gson.toJson(data);
+                    //str = in.nextLine();
+                    salida.println(str);
+                    System.out.println("El servidor se cerrara en 10 segundos...");
+                    Thread.sleep(10000);
                     break;
                 }
+
+                if(firstTurn) {
+                    data.setHostName(hostName);
+                    client.setPlayerName(data.getClientName());
+                    firstTurn = false;
+                }
+
+                gameOver = playerManager.turn(host,client);
+                if(gameOver){
+                    System.out.println("Juego terminado");
+                    if(hostWon(host,client)){
+                        System.out.println("Ganaste!");
+                    }
+                    else{
+                        System.out.println("Perdiste, gano " + client.getPlayerName() + "!!");
+                    }
+                    //gameOver = playerManager.turn(host,client);
+                    data.setHostBoard(host.getBoard());
+                    data.setClientBoard(client.getBoard());
+                    data.setGameOver(gameOver);
+
+                    str = gson.toJson(data);
+                    //str = in.nextLine();
+                    salida.println(str);
+                    System.out.println("El servidor se cerrara en 10 segundos...");
+                    Thread.sleep(10000);
+                    break;
+                }
+                data.setHostBoard(host.getBoard());
+                data.setClientBoard(client.getBoard());
+                data.setGameOver(gameOver);
+
+                str = gson.toJson(data);
+                //str = in.nextLine();
+                salida.println(str);
+                System.out.println("Esperando turno "+client.getPlayerName() + "...");
+
             }
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             System.out.println("IOException: " + e.getMessage());
         }
         salida.close();
@@ -89,6 +133,9 @@ public class Server {
         GameManager gameManager=new GameManager(host, client);
         return gameManager.hostWon();
     }
+
+
+
 }
 
 
