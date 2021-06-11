@@ -17,6 +17,7 @@ public class PlayerManager {
     private ActionValidator actionValidator;
     private final static int ATTACK = 1;
     private final static int MOVE_SOLDIER=2;
+    private final static int GET_OUT_OF_WHILE=1;
     //si el comandante muere, los demas no pueden moverse
 
 
@@ -42,39 +43,40 @@ public class PlayerManager {
             for (int i = 0; i < soldiersAlive(me); i++) {
                 int action = -1;
                 int id = i+1;
-                while (action != ATTACK && action != MOVE_SOLDIER) {
-                    if (!soldierIsDead(me,id)) {
+                while (action != ATTACK && action != MOVE_SOLDIER && !soldierIsDead(me, id)) {
 
                         PlayerGraphics.selectMoveMenu(id);
                         PlayerGraphics.attack();
 
-                        if (!onlyAttack(me,id)) {
+                        if (!onlyAttack(me,id) && !commanderIsDead) {
                             PlayerGraphics.moveSoldier();
                         }
 
                         action = in.nextInt();
-                        if (action != ATTACK || action != MOVE_SOLDIER) {
-                            if ((commanderIsDead||!soldierCanMove(me,id)) && action == MOVE_SOLDIER) {
-                                action = -1;
-                                PlayerGraphics.invalidOption();
-                            }
+                        if (action != ATTACK && action != MOVE_SOLDIER) {
+                            action = -1;
+                            PlayerGraphics.invalidOption();
                         }
-                        playerWon = executeAction(me,enemy,id,action);
-                        if(playerWon){
-                            return true;
+                        if ((commanderIsDead||!soldierCanMove(me,id)) && action == MOVE_SOLDIER) {
+                            action = -1;
+                            PlayerGraphics.invalidOption();
                         }
+
                     }
-                    action=ATTACK; //cambiamos el valor a uno que nos haga salir del while
+                    playerWon = executeAction(me,enemy,id,action);
+                    if(playerWon) {
+                        return true;
+                    }
+                    //action=ATTACK; //cambiamos el valor a uno que nos haga salir del while
 
                 }
 
             }
             printMyBoard(me.getBoard());
             printEnemyBoard(enemy.getBoard());
-
-        }
-        return playerWon; //mientras devuelva false, siguen jugando
+        return playerWon;//mientras devuelva false, siguen jugando
     }
+
 
 
     private void printMyBoard(Board board) {
@@ -116,6 +118,8 @@ public class PlayerManager {
         return me.getBoard().getNumberOfSoldiers();
     }
 
+
+
     private boolean commanderIsDead(Player me){
         return me.getBoard().commanderIsDead();
     }
@@ -147,6 +151,7 @@ public class PlayerManager {
                 playerWon=false;
                 break;
             default:
+                playerWon=false;
                 break;
         }
         return playerWon;

@@ -84,7 +84,7 @@ public class Game {
                 //playAsHost();
             }if (action==PLAY_AS_CLIENT){
                 playAsClient();
-            } else {
+            } if(action==SHOW_INSTRUCTIONS) {
                 printInstructions();
             }
             execute();

@@ -1,4 +1,5 @@
 package TP_Bis.SERVERS_Y_CLIENTES;
+import TP_Bis.Manager.GameManager;
 import TP_Bis.Manager.PlayerManager;
 import TP_Bis.entity.Board;
 import TP_Bis.entity.Boards;
@@ -40,12 +41,12 @@ public class Cliente {
         Player host=new Player("host");
         Player clientPlayer = new Player("jose");
         Boards boards=new Boards();
+        boolean gameOver;
         try {
             while (true) {
                 // Leo la entrada del usuario
 
-                playerManager.turn(clientPlayer, host);
-                Players players = new Players(host, clientPlayer);
+                gameOver=playerManager.turn(clientPlayer, host);
                 boards.setClientBoard(clientPlayer.getBoard());
                 boards.setHostBoard(host.getBoard());
                 Gson gson = new Gson();
@@ -63,7 +64,14 @@ public class Cliente {
                 host.setMyBoard(boards.getHostBoard());
 
 
-                if (linea.equals("Adios")) break;
+                if (gameOver){
+                    if(hostWon(host,clientPlayer)){
+                        System.out.println("Perdiste!");
+                    }else{
+                        System.out.println("Ganaste!");
+                    }
+                    break;
+                }
             }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
@@ -74,6 +82,10 @@ public class Cliente {
         entrada.close();
         stdIn.close();
         socketCliente.close();
+    }
+    private static boolean hostWon(Player host, Player client){
+        GameManager gameManager=new GameManager(host, client);
+        return gameManager.hostWon();
     }
 }
 
