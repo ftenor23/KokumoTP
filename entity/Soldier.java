@@ -22,7 +22,7 @@ public class Soldier {
         this.id=id;
         this.position=position;
     }
-    protected void substractALife(){
+    public void substractALife(){
 
         this.remainingLives--;
         if(this.remainingLives<1){
@@ -30,11 +30,11 @@ public class Soldier {
         }
     }
 
-    protected boolean isDead() {
+    public boolean isDead() {
         return isDead;
     }
 
-    protected boolean isCommander() {
+    public boolean isCommander() {
         return commander;
     }
 
@@ -42,19 +42,19 @@ public class Soldier {
         return id;
     }
 
-    protected void setCanMove(boolean canMove) {
+    public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
 
-    protected boolean canMove() {
+    public boolean canMove() {
         return canMove;
     }
 
-    protected int getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    protected void setDead(boolean dead) {
+    public void setDead(boolean dead) {
         isDead = dead;
     }
 

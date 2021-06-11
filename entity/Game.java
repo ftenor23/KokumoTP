@@ -1,35 +1,50 @@
 package TP_Bis.entity;
 
+import TP_Bis.Manager.ClientManager;
+import TP_Bis.Manager.PlayerManager;
+import TP_Bis.Manager.ServerManager;
+import TP_Bis.Server.Server;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Game {
     private Player playerOne;
     private Player playerTwo;
-    private Scanner in;
+    private PlayerManager playerManager;
     private boolean showTitle;
 
     public Game() {
-        this.in=new Scanner(System.in);
         this.showTitle=true;
+        playerManager=new PlayerManager();
+        /*try{
+            Server server = new Server();
+        }catch(IOException e){
+            System.out.println(e.getLocalizedMessage());
+        } catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+        }*/
     }
 
     private boolean gameOver() {
-        while(playerOne.turn(playerTwo) && playerTwo.turn(playerOne));
+       // while(!playerOne.turn(playerTwo) && !playerTwo.turn(playerOne));
+        while(!playerManager.turn(playerOne, playerTwo) && !playerManager.turn(playerTwo,playerOne));
         return true;
     }
 
     private boolean playerOneLost(){
-        return playerOne.getBoard().allSoldiersAreDead();
+        return playerManager.mySoldiersAreDead(playerOne);
     }
 
     private boolean playerTwoLost(){
-        return playerTwo.getBoard().allSoldiersAreDead();
+        return playerManager.mySoldiersAreDead(playerTwo);
     }
-    private Player getPlayerOne() {
+    public Player getPlayerOne() {
         return playerOne;
     }
 
-    private Player getPlayerTwo() {
+    public Player getPlayerTwo() {
         return playerTwo;
     }
 
@@ -51,40 +66,53 @@ public class Game {
         return;
     }
 
-    public void execute(){
 
+    public void execute(){
+        final int PLAY_AS_HOST = 1;
+        final int PLAY_AS_CLIENT=2;
+        final int SHOW_INSTRUCTIONS=3;
+        final int EXIT_GAME=4;
         int action=showOptions();
 
-        if(action<1 || action>3){
+        if(action<PLAY_AS_HOST || action>EXIT_GAME){
             System.out.println("Seleccion invalida.");
             execute();
         }
-        if(action==1 || action==2){
-            if(action==1){
+        if(action!=EXIT_GAME){
+            if(action==PLAY_AS_HOST){
                 play();
+                //playAsHost();
+            }if (action==PLAY_AS_CLIENT){
+                playAsClient();
             } else {
                 printInstructions();
             }
             execute();
         }
-        if(action==3){
+        if(action==EXIT_GAME){
             System.out.println("Gracias por jugar, hasta luego!");
         }
         return;
     }
 
     private int showOptions(){
+        Scanner in = new Scanner(System.in);
         if(showTitle) {
             System.out.println("Bienvenido a Kokumo no monogatari\n");
             this.showTitle=false;
         }
-        System.out.println("Seleccione una opcion:");
-        System.out.println("1) Jugar.");
-        System.out.println("2) Leer las reglas del juego.");
-        System.out.println("3) Salir.");
+        printOptions();
         int action = in.nextInt();
         System.out.println("");
         return action;
+    }
+
+    private void printOptions(){
+        System.out.println("Seleccione una opcion:");
+        System.out.println("1) Jugar como Host.");
+        System.out.println("2) Jugar como invitado");
+        System.out.println("3) Leer las reglas del juego.");
+        System.out.println("4) Salir.");
     }
     private void play(){
         Scanner nameIn=new Scanner(System.in);
@@ -106,7 +134,16 @@ public class Game {
         return;
     }
 
+    public void playAsHost(){
+        ServerManager serverManager=new ServerManager();
+    }
+
+    public void playAsClient(){
+        ClientManager clientManager = new ClientManager();
+    }
     public static void main(String args[]) {
+
+
         Game game = new Game();
         game.execute();
     }

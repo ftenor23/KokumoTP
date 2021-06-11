@@ -15,14 +15,14 @@ public class Grid {
         this.hasCommander=false;
     }
 
-    protected void occupyGrid(Soldier soldier){
+    public void occupyGrid(Soldier soldier){
         if(soldier.isCommander()){
             this.hasCommander=true;
         }
         this.occupied=true;
     }
 
-    protected void attackReceived(Soldier soldier){
+    public void attackReceived(Soldier soldier){
         if(soldier.isDead()) {
             this.deadSoldier = true;
             this.impassable = true;
@@ -30,11 +30,11 @@ public class Grid {
         }
     }
 
-    protected void attackReceived(){
+    public void attackReceived(){
         this.impassable=true;
     }
 
-    protected void emptyGrid(){
+    public void emptyGrid(){
         this.occupied=false;
         this.hasCommander=false;
     }

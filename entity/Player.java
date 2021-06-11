@@ -1,14 +1,18 @@
 package TP_Bis.entity;
 
+import TP_Bis.Manager.PlayerManager;
+
 import java.util.Scanner;
+
 
 public class Player {
     private Board myBoard;
-    private Board enemyBoard;
+    /*private Board enemyBoard;*/
     private String playerName;
     private Scanner in;
     private boolean firstTurn;
     private boolean commanderIsDead;
+    PlayerManager playerManager = new PlayerManager();
     //si el comandante muere, los demas no pueden moverse
 
     public Player(String name) {
@@ -19,7 +23,8 @@ public class Player {
         in = new Scanner(System.in);
     }
 
-    public boolean turn(Player enemy) {
+    /*public boolean turn(Player enemy) {
+        //playerManager.turn(me, enemy); ///corregir (iria en game)
         this.enemyBoard = enemy.getBoard();
 
         System.out.println("Turno de " + this.playerName + "\n");
@@ -80,17 +85,21 @@ public class Player {
         this.myBoard.printOwnBoard();
     }
 
-    public Board getBoard(){
+    */public Board getBoard(){
         return this.myBoard;
     }
 
     private void printEnemyBoard(Board enemyBoard){
-        this.enemyBoard=enemyBoard;
+
         System.out.println("\nTablero enemigo");
         enemyBoard.showEnemyBoard();
     }
 
-    private void setSoldiers(){
+    public void setFirstTurn(boolean firstTurn) {
+        this.firstTurn = firstTurn;
+    }
+
+    /*private void setSoldiers(){
         System.out.println("Posicionar soldados:\n"); //todo iria dentro de soldierManager
         int positionOne=-1;
         int positionTwo=-1;
@@ -153,101 +162,116 @@ public class Player {
                 }
             }
             myBoard.setSoldiers(positionOne, positionTwo, positionThree, firstTurn);
-        }*/
+        }
         firstTurn=false;
+    }*/
+
+    public Board getMyBoard() {
+        return myBoard;
     }
 
-
-    private boolean arrayOutOfBounds(int positionOne, int positionTwo, int positionThree){
-        if(positionOne<1 || positionOne>25 || positionTwo<1 || positionTwo>25 || positionThree<1 || positionThree>25){
-            return true;
-        }
-        return false;
+    public void setMyBoard(Board myBoard) {
+        this.myBoard = myBoard;
     }
 
-    private boolean arrayOutOfBounds(int position) {
-        return position<0 || position>myBoard.getMatrix().length;
-    }
-    private void attackEnemy(Board enemyBoard, int id){
-        System.out.println("Seleccione la posicion a atacar: ");
-        int position = in.nextInt()-1;
-        if(!myBoard.getSoldier(id).canMove()){
-            myBoard.getSoldier(id).setCanMove(true);
-        }
-        if(enemyBoard.getMatrix()[position].isImpassable()){
-            System.out.println("El ataque fue dirigido a una zona intransitable, perdiste tu turno.");
-        }
-        if(enemyBoard.getMatrix()[position].isOccupied()){
-            System.out.println("Le diste a tu enemigo.");
-        }
-        enemyBoard.attackReceived(position);
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
-    private void moveSoldier(int id){
-
-        int position= myBoard.getSoldierPosition(id);
-
-        if(position<0){
-            System.out.println("Posicion invalida"); //cargar error
-            return;
-        }
-        //creamos un ciclo hasta que se cumpla la condicion
-        int move=-1;
-        while(move<1 || move>4){
-            System.out.println("Ingrese el tipo de movimiento a realizar: ");
-            System.out.println("1)Mover arriba");
-            System.out.println("2)Mover abajo");
-            System.out.println("3)Mover a la izquierda");
-            System.out.println("4)Mover a la derecha");
-            move = in.nextInt();
-            if(move<1 || move>4){
-                System.out.println("OPCION INVALIDA");
+    /*private boolean arrayOutOfBounds(int positionOne, int positionTwo, int positionThree){
+                if(positionOne<1 || positionOne>25 || positionTwo<1 || positionTwo>25 || positionThree<1 || positionThree>25){
+                    return true;
+                }
+                return false;
             }
-            /*1=arriba
-            2=abajo
-            3=izquierda
-            4=derecha
-         */}
-        move(position, myBoard.getSoldier(id),move);
-        myBoard.getSoldier(id).setCanMove(false); //modificar para que cuando pase un turno pueda moverse
-    }
 
-    private void move(int position, Soldier soldier, int move){
-        //verificar funcion
-        int newPosition=-1;
-        switch (move){
-            case 1:
-                newPosition=position-5; //se mueve hacia arriba
-                break;
-            case 2:
-                newPosition=position+5; //se mueve hacia abajo
-                break;
-            case 3:
-                newPosition=position-1;
-                break;
-            case 4:
-                newPosition=position+1;
-                break;
-            default:
-                System.out.println("Error"); //guardar errror
-                break;
-        }
-        if(newPosition<0 || newPosition>myBoard.getMatrix().length){
-            System.out.println("Movimiento invalido");
-            return;
-        }
-        if(myBoard.getMatrix()[newPosition].isOccupied()) {
-            System.out.println("Posicion ocupada.");
-            return;
-        }
-        if(myBoard.getMatrix()[newPosition].isImpassable()){
-            System.out.println("Posicion intransitable.");
-            return;
-        }
-            myBoard.getMatrix()[position].emptyGrid();
-            myBoard.setSoldierPosition(newPosition, soldier,firstTurn);
-            return;
-        }
+            private boolean arrayOutOfBounds(int position) {
+                return position<0 || position>myBoard.getMatrix().length;
+            }
+            private void attackEnemy(Board enemyBoard, int id){
+                System.out.println("Seleccione la posicion a atacar: ");
+                int position = in.nextInt()-1;
+                if(!myBoard.getSoldier(id).canMove()){
+                    myBoard.getSoldier(id).setCanMove(true);
+                }
+                if(enemyBoard.getMatrix()[position].isImpassable()){
+                    System.out.println("El ataque fue dirigido a una zona intransitable, perdiste tu turno.");
+                }
+                if(enemyBoard.getMatrix()[position].isOccupied()){
+                    System.out.println("Le diste a tu enemigo.");
+                }
+                enemyBoard.attackReceived(position);
+            }
+
+            private void moveSoldier(int id){
+
+                int position= myBoard.getSoldierPosition(id);
+
+                if(position<0){
+                    System.out.println("Posicion invalida"); //cargar error
+                    return;
+                }
+                //creamos un ciclo hasta que se cumpla la condicion
+                int move=-1;
+                while(move<1 || move>4){
+                    System.out.println("Ingrese el tipo de movimiento a realizar: ");
+                    System.out.println("1)Mover arriba");
+                    System.out.println("2)Mover abajo");
+                    System.out.println("3)Mover a la izquierda");
+                    System.out.println("4)Mover a la derecha");
+                    move = in.nextInt();
+                    if(move<1 || move>4){
+                        System.out.println("OPCION INVALIDA");
+                    }
+                    /*1=arriba
+                    2=abajo
+                    3=izquierda
+                    4=derecha
+                 }
+                move(position, myBoard.getSoldier(id),move);
+                myBoard.getSoldier(id).setCanMove(false); //modificar para que cuando pase un turno pueda moverse
+            }
+
+            private void move(int position, Soldier soldier, int move){
+                //verificar funcion
+                int newPosition=-1;
+                switch (move){
+                    case 1:
+                        newPosition=position-5; //se mueve hacia arriba
+                        break;
+                    case 2:
+                        newPosition=position+5; //se mueve hacia abajo
+                        break;
+                    case 3:
+                        newPosition=position-1;
+                        break;
+                    case 4:
+                        newPosition=position+1;
+                        break;
+                    default:
+                        System.out.println("Error"); //guardar errror
+                        break;
+                }
+                if(newPosition<0 || newPosition>myBoard.getMatrix().length){
+                    System.out.println("Movimiento invalido");
+                    return;
+                }
+                if(myBoard.getMatrix()[newPosition].isOccupied()) {
+                    System.out.println("Posicion ocupada.");
+                    return;
+                }
+                if(myBoard.getMatrix()[newPosition].isImpassable()){
+                    System.out.println("Posicion intransitable.");
+                    return;
+                }
+                    myBoard.getMatrix()[position].emptyGrid();
+                    myBoard.setSoldierPosition(newPosition, soldier,firstTurn);
+                    return;
+                }
+
+            */public boolean isFirstTurn() {
+        return firstTurn;
+    }
 
     public String getPlayerName() {
         return playerName;

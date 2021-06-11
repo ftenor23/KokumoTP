@@ -15,9 +15,10 @@ public class Board {
         for(int i=0; i< matrix.length; i++){
             matrix[i] = new Grid();
         }
+        soldiers = new Soldier[NUMBER_OF_SOLDIERS];
     }
 
-    protected void setSoldiers(int positionOne, int positionTwo, int positionThree, boolean firstTurn){
+    public void setSoldiers(int positionOne, int positionTwo, int positionThree, boolean firstTurn){
         //ingresar las posiciones de los soldados
         soldiers=new Soldier[NUMBER_OF_SOLDIERS];
         Scanner in = new Scanner(System.in);
@@ -87,7 +88,7 @@ public class Board {
     private boolean arrayOutOfBounds(int position){
         return position<0 || position>= matrix.length;
     }
-    protected void setSoldierPosition(int position, Soldier soldier, boolean firstTurn) {
+    public void setSoldierPosition(int position, Soldier soldier, boolean firstTurn) {
 
         if(matrix[position].isOccupied()){
             if(firstTurn) {
@@ -107,7 +108,7 @@ public class Board {
         return NUMBER_OF_SOLDIERS;
     }
 
-    protected void printOwnBoard(){
+    public void printOwnBoard(){
         int counter=0;
         for(int i = 0; i< matrix.length; i++){
             if(counter==LINE_LENGHT){
@@ -139,7 +140,7 @@ public class Board {
         System.out.println("");
     }
 
-    protected void showEnemyBoard(){
+    public void showEnemyBoard(){
         int counter=0;
         for(int i = 0; i< matrix.length; i++) {
             if (counter == LINE_LENGHT) {
@@ -163,7 +164,7 @@ public class Board {
         System.out.println("\n\n");
     }
 
-    protected void attackReceived(int position) {
+    public void attackReceived(int position) {
         int id = -1;
         for (int i = 0; i < soldiers.length; i++) {
             if (soldiers[i].getPosition() == position) {
@@ -180,7 +181,7 @@ public class Board {
 
 
 
-    protected int getSoldierPosition(int id){
+    public int getSoldierPosition(int id){
 
         for (int i = 0; i < soldiers.length; i++) {
             if(soldiers[i].getId()==id){
@@ -194,7 +195,7 @@ public class Board {
         return matrix;
     }
 
-    protected Soldier getSoldier(int id){
+    public Soldier getSoldier(int id){
         for(int i=0; i<soldiers.length;i++){
             if(soldiers[i].getId()==id){
                 return soldiers[i];
@@ -203,7 +204,7 @@ public class Board {
         return null;
     }
 
-    protected boolean allSoldiersAreDead(){
+    public boolean allSoldiersAreDead(){
         boolean areDead = true;
         for(int i=0; i<soldiers.length; i++){
             if(!soldiers[i].isDead()){
@@ -213,7 +214,7 @@ public class Board {
         return areDead;
     }
 
-    protected boolean commanderIsDead(){
+    public boolean commanderIsDead(){
         for(int i=0; i<soldiers.length;i++){
             if(soldiers[i].isCommander() && soldiers[i].isDead()){
                 return true;
@@ -222,7 +223,15 @@ public class Board {
         return false;
     }
 
-    protected int soldiersAlive(){
+    public Soldier[] getSoldiers() {
+        return soldiers;
+    }
+
+    public int getLineLenght() {
+        return LINE_LENGHT;
+    }
+
+    public int soldiersAlive(){
         int soldiersAlive=0;
         for(int i=0;i<soldiers.length;i++){
             if(!soldiers[i].isDead()){

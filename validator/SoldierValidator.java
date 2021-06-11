@@ -4,7 +4,11 @@ import TP_Bis.entity.Soldier;
 
 public class SoldierValidator {
     PositionValidator positionValidator = new PositionValidator();
-    /*public boolean isValid(Soldier soldier[], int positionOne, int positionTwo, int positionThree){
-        positionValidator.isValid(positionOne, soldier[0].getId());
-    }*/
+    public boolean isValid(int positionOne, int positionTwo, int positionThree){
+        return !positionValidator.arrayOutOfBounds(positionOne,positionTwo,positionThree);
+    }
+
+    public boolean isValid(int position){
+        return !positionValidator.arrayOutOfBounds(position);
+    }
 }
