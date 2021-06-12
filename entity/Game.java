@@ -1,10 +1,10 @@
 package TP_Bis.entity;
 
-import TP_Bis.Manager.ClientManager;
+import TP_Bis.Graphic.Graphics;
 import TP_Bis.Manager.PlayerManager;
-import TP_Bis.Manager.ServerManager;
-import TP_Bis.Server.Server;
-import com.google.gson.Gson;
+import TP_Bis.Server_Client.Client;
+import TP_Bis.Server_Client.Server;
+
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -81,10 +81,9 @@ public class Game {
         }
         if(action!=EXIT_GAME){
             if(action==PLAY_AS_HOST){
-                play();
                 //playAsHost();
             }if (action==PLAY_AS_CLIENT){
-                playAsClient();
+                //playAsClient();
             } if(action==SHOW_INSTRUCTIONS) {
                 printInstructions();
             }
@@ -115,7 +114,7 @@ public class Game {
         System.out.println("3) Leer las reglas del juego.");
         System.out.println("4) Salir.");
     }
-    private void play(){
+    /*private void play(){
         Scanner nameIn=new Scanner(System.in);
         System.out.println("Ingrese el nombre del jugador 1: ");
         String namePlayerOne= nameIn.nextLine();
@@ -133,15 +132,25 @@ public class Game {
             System.out.println("Gano " + playerOne.getPlayerName() + "!!");
         }
         return;
-    }
+    }*/
 
-    public void playAsHost(){
-        ServerManager serverManager=new ServerManager();
+   /* public void playAsHost(){
+        Server server = new Server();
+        try {
+            server.run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void playAsClient(){
-        ClientManager clientManager = new ClientManager();
-    }
+        Client client = new Client();
+        try {
+            client.run();
+        } catch (IOException e) {
+            Graphics.printException(e);
+        }
+    }*/
     public static void main(String args[]) {
 
 

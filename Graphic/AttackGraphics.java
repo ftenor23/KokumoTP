@@ -3,19 +3,19 @@ package TP_Bis.Graphic;
 public class AttackGraphics extends Graphics{
 
     //ATTACKMANAGER
-    public void printSelectPositionToAttackMessage(){
+    public static void printSelectPositionToAttackMessage(){
         System.out.println("Seleccione la posicion a atacar: ");
     }
 
-    public void printNotValidAttack(){
+    public static void printNotValidAttack(){
         System.out.println("Ataque no valido");
     }
 
-    public void attackToImpassableZone(){
+    public static void attackToImpassableZone(){
         System.out.println("El ataque fue dirigido a una zona intransitable, perdiste tu turno.");
     }
 
-    public void enemyAttacked(){
+    public static void enemyAttacked(){
         System.out.println("Le diste a tu enemigo.");
     }
 

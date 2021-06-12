@@ -1,5 +1,6 @@
 package TP_Bis.Manager;
 
+import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.AttackGraphics;
 import TP_Bis.Graphic.BoardGraphics;
 import TP_Bis.entity.Player;
@@ -10,16 +11,16 @@ import java.util.Scanner;
 public class AttackManager {
     private AttackValidator attackValidator = new AttackValidator();
     private BoardManager boardManager = new BoardManager();
-    private AttackGraphics attackGraphics = new AttackGraphics();
+
 
     public void attackEnemy(Player me, Player enemy, int id){
         Scanner in = new Scanner(System.in);
-        attackGraphics.printSelectPositionToAttackMessage();
-        int position = in.nextInt()-1;
+        AttackGraphics.printSelectPositionToAttackMessage();
+        int position = EnterData.nextInt()-1;
         if(attack(me, enemy,id, position)) {
             attackReceived(enemy, position);
         }else{
-            attackGraphics.printNotValidAttack();
+            AttackGraphics.printNotValidAttack();
         }
     }
 
@@ -28,7 +29,7 @@ public class AttackManager {
             return false;
         }
         if (attackValidator.zoneIsImpassable(enemy, position)) {
-            attackGraphics.attackToImpassableZone();
+            AttackGraphics.attackToImpassableZone();
             return false;
         }
 
@@ -36,7 +37,7 @@ public class AttackManager {
             setCanMove(me,id);
         }
         if (attackValidator.positionIsOccupied(enemy, position)) {
-            attackGraphics.enemyAttacked();
+            AttackGraphics.enemyAttacked();
         }
     return true;
     }

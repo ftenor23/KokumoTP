@@ -1,6 +1,8 @@
 package TP_Bis.entity;
 
 public class Data {
+    /*Esta clase es la que utilizamos para intercambiar datos entre cliente y servidor*/
+
     private Board hostBoard;
     private Board clientBoard;
     private String hostName;

@@ -1,5 +1,6 @@
 package TP_Bis.Manager;
 
+import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.PlayerGraphics;
 import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
@@ -17,6 +18,7 @@ public class PlayerManager {
     private ActionValidator actionValidator;
     private final static int ATTACK = 1;
     private final static int MOVE_SOLDIER=2;
+    private final static int INVALID_OPTION=-1;
     private final static int GET_OUT_OF_WHILE=1;
     //si el comandante muere, los demas no pueden moverse
 
@@ -41,7 +43,7 @@ public class PlayerManager {
             this.commanderIsDead = commanderIsDead(me);
 
             for (int i = 0; i < soldiersAlive(me); i++) {
-                int action = -1;
+                int action = INVALID_OPTION;
                 int id = i+1;
                 while (action != ATTACK && action != MOVE_SOLDIER && !soldierIsDead(me, id)) {
 
@@ -52,23 +54,24 @@ public class PlayerManager {
                             PlayerGraphics.moveSoldier();
                         }
 
-                        action = in.nextInt();
+                        action = EnterData.nextInt();
                         if (action != ATTACK && action != MOVE_SOLDIER) {
-                            action = -1;
+                            action = INVALID_OPTION;
                             PlayerGraphics.invalidOption();
                         }
                         if ((commanderIsDead||!soldierCanMove(me,id)) && action == MOVE_SOLDIER) {
-                            action = -1;
+                            action = INVALID_OPTION;
                             PlayerGraphics.invalidOption();
                         }
 
                     }
                     playerWon = executeAction(me,enemy,id,action);
                     if(playerWon) {
+                        //si el jugador gano, retornamos true y le informamos al rival
+                        printMyBoard(me.getBoard());
+                        printEnemyBoard(enemy.getBoard());
                         return true;
                     }
-                    //action=ATTACK; //cambiamos el valor a uno que nos haga salir del while
-
                 }
 
             }
@@ -135,6 +138,7 @@ public class PlayerManager {
     private boolean onlyAttack(Player me, int id){
         return actionValidator.onlyAttack(me,id);
     }
+
 
     private boolean executeAction(Player me, Player enemy, int id,int action){
         boolean playerWon=true;

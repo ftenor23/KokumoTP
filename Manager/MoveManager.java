@@ -1,5 +1,6 @@
 package TP_Bis.Manager;
 
+import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.MoveGraphics;
 import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
@@ -30,10 +31,10 @@ public class MoveManager {
         int move=-1; //iniciamos en -1
         while(!moveValidator.moveIsValid(move, position)){ //verificar funcion
             MoveGraphics.selectMove();
-            move = in.nextInt();
+            move = EnterData.nextInt();
             if(!moveValidator.moveIsValid(move, position)){
                 MoveGraphics.invalidOption();
-                move=-1; //REVISAR
+                move=-1;
             }
         }
         move(player,position, id,move);
@@ -75,6 +76,7 @@ public class MoveManager {
             MoveGraphics.impassablePosition();
             return;
         }
+
         player.getBoard().getMatrix()[position].emptyGrid();
         player.getBoard().setSoldierPosition(newPosition, soldier, player.isFirstTurn());
         return;

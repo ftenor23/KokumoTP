@@ -5,7 +5,7 @@ import TP_Bis.entity.Board;
 public class BoardGraphics extends Graphics{
 
     //BOARDMANAGER
-    public void printOwnBoard(Board board){
+    public static void printOwnBoard(Board board){
         int counter=0;
         for(int i = 0; i< board.getMatrix().length; i++){
             if(counter==board.getLineLenght()){
@@ -37,7 +37,7 @@ public class BoardGraphics extends Graphics{
         System.out.println("");
     }
 
-    public void showEnemyBoard(Board enemyBoard){
+    public static void showEnemyBoard(Board enemyBoard){
         System.out.println("\nTablero enemigo");
         int counter=0;
         for(int i = 0; i< enemyBoard.getMatrix().length; i++) {
@@ -62,24 +62,24 @@ public class BoardGraphics extends Graphics{
         System.out.println("\n\n");
     }
 
-    public void positionOccupied(int id){
+    public static void positionOccupied(int id){
         System.out.println("La posicion en la que quiere ubicar al ninja "+ id + " esta ocupada. Ingrese otra posicion:");
 
     }
 
-    public void positionOutOfBounds(int id){
+    public static void positionOutOfBounds(int id){
         System.out.println("La posicion en la que quiere ubicar al ninja " + id + " esta fuera de los limites. Ingrese otra posicion:");
     }
 
-    public void occupiedPosition(){
+    public static void occupiedPosition(){
         System.out.println("Posicion ocupada.");
     }
 
-    public void lostTurnPositionOccupied(){
+    public static void lostTurnPositionOccupied(){
         System.out.println("Perdiste tu turno, la posicion esta ocupada.");
     }
 
-    public void lostTurnImpassableZone(){
+    public static void lostTurnImpassableZone(){
         System.out.println("Perdiste tu turno, el terreno esta inhabilitado");
     }
 }
