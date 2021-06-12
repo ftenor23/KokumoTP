@@ -58,6 +58,8 @@ public class Client {
             Graphics.printException(e);
         } catch (NullPointerException e){
             Graphics.printException(e);
+        } catch (Exception e){
+
         }
 
         // Libera recursos

@@ -64,6 +64,8 @@ public class Game {
                 playAsHost();
             }if (action==PLAY_AS_CLIENT){
                 playAsClient();
+                Graphics.thanksForPlaying();
+                return;
             } if(action==SHOW_INSTRUCTIONS) {
                 printInstructions();
             }

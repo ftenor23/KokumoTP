@@ -70,7 +70,7 @@ public class ClientManager {
 
                 gameOver(host, clientPlayer, output, input, message, data, gson);
 
-                break;
+                return;
             }
 
             gameOver = playerManager.turn(clientPlayer, host);
@@ -82,7 +82,7 @@ public class ClientManager {
 
             if (gameOver) {
                 gameOver(host, clientPlayer, output, input, message, data, gson);
-                break;
+                return;
             } else {
                 ClientGraphics.waitingEnemyTurn(host.getPlayerName());
             }

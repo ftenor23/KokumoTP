@@ -60,7 +60,7 @@ public class ServerManager {
 
             if (gameOver){
                 gameOver(host,client,data,gson,str,output);
-                break;
+                return;
             }
 
             if(firstTurn) {
@@ -72,7 +72,7 @@ public class ServerManager {
             gameOver = playerManager.turn(host,client);
             if(gameOver){
                 gameOver(host,client,data,gson,str,output);
-                break;
+                return;
             }
             data.setHostBoard(host.getBoard());
             data.setClientBoard(client.getBoard());
