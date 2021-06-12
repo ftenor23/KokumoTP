@@ -15,8 +15,8 @@ import java.util.Scanner;
 public class Server{
     public static final int PORT = 4444;
 
-    public static void main(String[] args) throws IOException {
-      //public void run()throws IOException{
+    //public static void main(String[] args) throws IOException {
+      public void run()throws IOException{
         // Establece el puerto en el que escucha peticiones
         String ip = InetAddress.getLocalHost().getHostAddress();
         ServerGraphics.showIp(ip);

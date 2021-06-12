@@ -61,9 +61,9 @@ public class Game {
         }
         if(action!=EXIT_GAME){
             if(action==PLAY_AS_HOST){
-                //playAsHost();
+                playAsHost();
             }if (action==PLAY_AS_CLIENT){
-                //playAsClient();
+                playAsClient();
             } if(action==SHOW_INSTRUCTIONS) {
                 printInstructions();
             }
@@ -109,7 +109,7 @@ public class Game {
         return;
     }*/
 
-   /* public void playAsHost(){
+   public void playAsHost(){
         Server server = new Server();
         try {
             server.run();
@@ -125,7 +125,7 @@ public class Game {
         } catch (IOException e) {
             Graphics.printException(e);
         }
-    }*/
+    }
     public static void main(String args[]) {
 
 

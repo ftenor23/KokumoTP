@@ -14,8 +14,8 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Client {
-    public static void main(String[] args)  throws IOException {
-      //public void run() throws IOException{
+    //public static void main(String[] args)  throws IOException {
+      public void run() throws IOException{
         Socket socketClient = null;
         BufferedReader input = null;
         PrintWriter output = null;
