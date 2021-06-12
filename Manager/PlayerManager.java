@@ -33,11 +33,11 @@ public class PlayerManager {
     }
 
     public boolean turn(Player me, Player enemy) {
-        Scanner in = new Scanner(System.in);
         boolean playerWon = false;
         PlayerGraphics.playerTurn(me);
+        printMyBoard(me.getBoard());
+        printEnemyBoard(enemy.getMyBoard());
         if (me.isFirstTurn()) {
-            printMyBoard(me.getBoard());
             setSoldiers(me);
         } else {
             this.commanderIsDead = commanderIsDead(me);

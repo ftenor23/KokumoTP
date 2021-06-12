@@ -55,6 +55,7 @@ public class ServerManager {
             data = gson.fromJson(str, Data.class);
             host.setMyBoard(data.getHostBoard());
             client.setMyBoard(data.getClientBoard());
+
             gameOver = data.isGameOver();
 
             if (gameOver){

@@ -43,10 +43,9 @@ public class MoveManager {
 
     private void move(Player player, int position, int soldierId, int move){
         Soldier soldier = player.getBoard().getSoldier(soldierId);
-        //verificar funcion
         int newPosition=-1;
-        final int MAX_MOVEMENT=5;
-        final int MIN_MOVEMENT=1;
+        final int MAX_MOVEMENT=5;//si nos movemos hacia arriba o abajo sumamos 5 grillas
+        final int MIN_MOVEMENT=1;//si nos movemos a izq o derecha, 1 sola
         switch (move){
             case 1:
                 newPosition=position-MAX_MOVEMENT; //se mueve hacia arriba
@@ -77,8 +76,8 @@ public class MoveManager {
             return;
         }
 
-        player.getBoard().getMatrix()[position].emptyGrid();
-        player.getBoard().setSoldierPosition(newPosition, soldier, player.isFirstTurn());
+        emptyGrid(player,position);
+        setSoldierPosition(player,newPosition,soldier);
         return;
     }
 
@@ -88,5 +87,14 @@ public class MoveManager {
 
     private void setSoldierCantMove(Player player, int id){
         player.getBoard().getSoldier(id).setCanMove(false);
+    }
+
+    private void emptyGrid(Player player, int position){
+        player.getBoard().getMatrix()[position].emptyGrid();
+    }
+
+    private void setSoldierPosition(Player player, int newPosition, Soldier soldier){
+        BoardManager boardManager = new BoardManager();
+        boardManager.setSoldierPosition(player.getBoard(), newPosition, soldier, player.isFirstTurn());
     }
 }

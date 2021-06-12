@@ -1,6 +1,8 @@
 package TP_Bis.entity;
 
 
+import TP_Bis.Graphic.BoardGraphics;
+
 import java.util.Scanner;
 
 public class Board {
@@ -18,7 +20,7 @@ public class Board {
         soldiers = new Soldier[NUMBER_OF_SOLDIERS];
     }
 
-    public void setSoldiers(int positionOne, int positionTwo, int positionThree, boolean firstTurn){
+    /*public void setSoldiers(int positionOne, int positionTwo, int positionThree, boolean firstTurn){
         //ingresar las posiciones de los soldados
         soldiers=new Soldier[NUMBER_OF_SOLDIERS];
         Scanner in = new Scanner(System.in);
@@ -102,69 +104,61 @@ public class Board {
             soldiers[soldier.getId()-1].setPosition(position);
             matrix[position].occupyGrid(soldiers[soldier.getId()-1]);
         }
-    }
+    }*/
 
     public int getNumberOfSoldiers() {
         return NUMBER_OF_SOLDIERS;
     }
 
-    public void printOwnBoard(){
+   /* public void printOwnBoard(){
         int counter=0;
         for(int i = 0; i< matrix.length; i++){
             if(counter==LINE_LENGHT){
-                System.out.println(" "); //damos un salto de linea cuando llegamos a 5
+                BoardGraphics.printLine(); //damos un salto de linea cuando llegamos a 5
                 counter=0;
             }
 
             if(matrix[i].isOccupied()) {
                 if(matrix[i].hasDeadSoldier()){
-                    System.out.print("X  ");
+                    BoardGraphics.printDeadSoldier();
                 }
                 else if (matrix[i].hasCommander()) {
-                    System.out.print("C  ");
+                    BoardGraphics.printCommander();
                 }else{
-                    System.out.print("S  ");
+                    BoardGraphics.printSoldier();
                 }
             } else if(matrix[i].isImpassable()){
-                System.out.print("*  ");
+                BoardGraphics.printImpassableZone();
             } else if(!matrix[i].isOccupied()){
-                if (i < 9) {
-                    System.out.print(i + 1 + "  ");
-                } else {
-                    System.out.print(i+1 + " ");
-                }
+                BoardGraphics.printPosition(i);
             }
             counter++;
 
         }
-        System.out.println("");
+        BoardGraphics.printLine();
     }
 
     public void showEnemyBoard(){
         int counter=0;
         for(int i = 0; i< matrix.length; i++) {
             if (counter == LINE_LENGHT) {
-                System.out.println(" "); //damos un salto de linea cuando llegamos a 5
+                BoardGraphics.printLine(); //damos un salto de linea cuando llegamos a 5
                 counter = 0;
             }
 
             if (matrix[i].hasDeadSoldier()) {
-                System.out.print("X  ");
+                BoardGraphics.printDeadSoldier();
             } else if (matrix[i].isImpassable()) {
-                System.out.print("*  ");
+                BoardGraphics.printImpassableZone();
             }else {
-                if (i < 10) {
-                    System.out.print(i + 1 + "  ");
-                } else {
-                    System.out.print(i+1 + " ");
-                }
+                BoardGraphics.printPosition(i);
             }
             counter++;
         }
-        System.out.println("\n\n");
-    }
+        BoardGraphics.printLine();
+    }*/
 
-    public void attackReceived(int position) {
+    /*public void attackReceived(int position) {
         int id = -1;
         for (int i = 0; i < soldiers.length; i++) {
             if (soldiers[i].getPosition() == position) {
@@ -177,7 +171,7 @@ public class Board {
         } else {
             matrix[position].attackReceived();
         }
-    }
+    }*/
 
 
 

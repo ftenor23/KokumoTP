@@ -4,37 +4,34 @@ import TP_Bis.entity.Board;
 
 public class BoardGraphics extends Graphics{
 
-    //BOARDMANAGER
+
     public static void printOwnBoard(Board board){
         int counter=0;
         for(int i = 0; i< board.getMatrix().length; i++){
             if(counter==board.getLineLenght()){
-                System.out.println(" "); //damos un salto de linea cuando llegamos a 5
+                printLine(); //damos un salto de linea cuando llegamos a 5
                 counter=0;
             }
 
-            if(board.getMatrix()[i].isOccupied()) {
+            if(board.getMatrix()[i].isImpassable()){
                 if(board.getMatrix()[i].hasDeadSoldier()){
-                    System.out.print("X  ");
-                }
-                else if (board.getMatrix()[i].hasCommander()) {
-                    System.out.print("C  ");
-                }else{
-                    System.out.print("S  ");
-                }
-            } else if(board.getMatrix()[i].isImpassable()){
-                System.out.print("*  ");
-            } else if(!board.getMatrix()[i].isOccupied()){
-                if (i < 9) {
-                    System.out.print(i + 1 + "  ");
+                    printDeadSoldier();
                 } else {
-                    System.out.print(i+1 + " ");
+                    printImpassableZone();
                 }
+            } else if(board.getMatrix()[i].isOccupied()){
+                if(board.getMatrix()[i].hasCommander()){
+                    printCommander();
+                } else {
+                    printSoldier();
+                }
+            } else {
+                printPosition(i);
             }
             counter++;
 
         }
-        System.out.println("");
+        printLine();
     }
 
     public static void showEnemyBoard(Board enemyBoard){
@@ -42,24 +39,20 @@ public class BoardGraphics extends Graphics{
         int counter=0;
         for(int i = 0; i< enemyBoard.getMatrix().length; i++) {
             if (counter == enemyBoard.getLineLenght()) {
-                System.out.println(" "); //damos un salto de linea cuando llegamos a 5
+                BoardGraphics.printLine(); //damos un salto de linea cuando llegamos a 5
                 counter = 0;
             }
 
             if (enemyBoard.getMatrix()[i].hasDeadSoldier()) {
-                System.out.print("X  ");
+                printDeadSoldier();
             } else if (enemyBoard.getMatrix()[i].isImpassable()) {
-                System.out.print("*  ");
+                printImpassableZone();
             }else {
-                if (i < 10) {
-                    System.out.print(i + 1 + "  ");
-                } else {
-                    System.out.print(i+1 + " ");
-                }
+                printPosition(i);
             }
             counter++;
         }
-        System.out.println("\n\n");
+        BoardGraphics.printLine();
     }
 
     public static void positionOccupied(int id){
@@ -81,6 +74,30 @@ public class BoardGraphics extends Graphics{
 
     public static void lostTurnImpassableZone(){
         System.out.println("Perdiste tu turno, el terreno esta inhabilitado");
+    }
+
+    public static void printDeadSoldier(){
+        System.out.print("X  ");
+    }
+
+    public static void printImpassableZone(){
+        System.out.print("*  ");
+    }
+
+    public static void printCommander(){
+        System.out.print("C  ");
+    }
+
+    public static void printSoldier(){
+        System.out.print("S  ");
+    }
+
+    public static void printPosition(int i){
+        if (i < 9) {
+            System.out.print(i + 1 + "  ");
+        } else {
+            System.out.print(i+1 + " ");
+        }
     }
 }
 

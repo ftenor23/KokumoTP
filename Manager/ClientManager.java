@@ -52,6 +52,8 @@ public class ClientManager {
 
     public static void execute(Player clientPlayer, Player host, Data data,
                                 PrintWriter output, BufferedReader input) throws IOException, InterruptedException {
+        //Ejecuta juego como cliente hasta que uno de los dos jugadores pierde
+
         boolean gameOver = false;
         boolean knowHostName = false;
         String message = " ";
@@ -69,8 +71,6 @@ public class ClientManager {
                 gameOver(host, clientPlayer, output, input, message, data, gson);
 
                 break;
-            } else {
-                ClientGraphics.waitingEnemyTurn(host.getPlayerName());
             }
 
             gameOver = playerManager.turn(clientPlayer, host);
@@ -89,7 +89,7 @@ public class ClientManager {
 
             // La envia al servidor
             output.println(message);
-            // Envía a la salida estándar la respuesta del servidor
+            // Leemos el mensaje del server y lo convertimos a nuestra clase Data
             message = input.readLine();
             data = gson.fromJson(message, Data.class);
             setNewValues(clientPlayer, host, data, gameOver);
@@ -103,8 +103,11 @@ public class ClientManager {
 
     public static void setNewValues(Player clientPlayer, Player host, Data data,
                                      boolean gameOver) {
+        //seteamos los tableros con los valores originales
+
         clientPlayer.setMyBoard(data.getClientBoard());
         host.setMyBoard(data.getHostBoard());
+        //si el juego se termino, lo guardamos en nuestra variable para poder ejecutar los ciclos
         gameOver = data.isGameOver();
     }
 }
