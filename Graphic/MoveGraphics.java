@@ -22,11 +22,11 @@ public abstract class MoveGraphics extends Graphics{
     }
 
     public static void positionOccupied() {
-        System.out.println("Posicion ocupada.");
+        System.out.println("Posicion ocupada. Perdiste tu turno.");
     }
 
     public static void impassablePosition() {
-        System.out.println("Posicion intransitable.");
+        System.out.println("Posicion intransitable. Perdiste tu turno.");
     }
 
     public static void error(){

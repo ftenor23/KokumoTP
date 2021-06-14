@@ -60,4 +60,9 @@ public abstract class Graphics {
     public static void playerWon(String playerName){
         System.out.println("Gano " + playerName + "!");
     }
+
+    public static void enterAValidNumber(){
+        System.out.println("Caracter no valido. Ingrese solo una variable numerica.");
+    }
 }
+

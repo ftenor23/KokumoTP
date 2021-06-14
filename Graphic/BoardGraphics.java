@@ -53,6 +53,7 @@ public abstract class BoardGraphics extends Graphics{
             counter++;
         }
         BoardGraphics.printLine();
+        BoardGraphics.printLine();
     }
 
     public static void positionOccupied(int id){

@@ -14,9 +14,11 @@ public class AttackManager {
 
 
     public void attackEnemy(Player me, Player enemy, int id){
-        Scanner in = new Scanner(System.in);
+        boolean validPosition=false;
+
         AttackGraphics.printSelectPositionToAttackMessage();
         int position = EnterData.nextInt()-1;
+
         if(attack(me, enemy,id, position)) {
             attackReceived(enemy, position);
         }else{

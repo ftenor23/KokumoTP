@@ -1,5 +1,8 @@
 package TP_Bis.DataIn;
 
+import TP_Bis.Graphic.Graphics;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class EnterData {
@@ -11,6 +14,12 @@ public class EnterData {
 
     public static int nextInt(){
         Scanner in = new Scanner(System.in);
-        return in.nextInt();
+        try {
+            return in.nextInt();
+        }catch (InputMismatchException e){
+            Graphics.enterAValidNumber();
+            return nextInt();
+        }
+
     }
 }

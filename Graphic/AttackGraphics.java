@@ -8,7 +8,7 @@ public abstract class AttackGraphics extends Graphics{
     }
 
     public static void printNotValidAttack(){
-        System.out.println("Ataque no valido");
+        System.out.println("Ataque no valido.");
     }
 
     public static void attackToImpassableZone(){

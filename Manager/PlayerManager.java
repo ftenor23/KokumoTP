@@ -69,13 +69,14 @@ public class PlayerManager {
 
                 }
                 playerWon = executeAction(me, enemy, id, action);
+
                 if(playerWon){
                     return true;
                 }
             }
 
         }
-        printMyBoard(me.getBoard());
+        //printMyBoard(me.getBoard());
         printEnemyBoard(enemy.getBoard());
         return playerWon;//mientras devuelva false, siguen jugando
     }
@@ -158,6 +159,7 @@ public class PlayerManager {
                 playerWon = false;
                 break;
         }
+        printEnemyBoard(enemy.getBoard());
         return playerWon;
 
     }
