@@ -2,7 +2,7 @@ package TP_Bis.Graphic;
 
 import java.net.Socket;
 
-public class ServerGraphics extends Graphics{
+public abstract class ServerGraphics extends Graphics{
     public static void showIp(String ip){
         System.out.println("La ip de este equipo es: " + ip);
     }

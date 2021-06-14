@@ -2,7 +2,7 @@ package TP_Bis.Graphic;
 
 import TP_Bis.entity.Player;
 
-public class PlayerGraphics extends Graphics{
+public abstract class PlayerGraphics extends Graphics{
     public static void playerTurn(Player player){
         System.out.println("Turno de " + player.getPlayerName() + "\n");
     }

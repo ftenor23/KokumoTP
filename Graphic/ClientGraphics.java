@@ -1,6 +1,6 @@
 package TP_Bis.Graphic;
 
-public class ClientGraphics extends ServerGraphics{
+public abstract class ClientGraphics extends ServerGraphics{
     public static void enterHostIP(){
         System.out.println("Ingrese la IP del Host: ");
     }

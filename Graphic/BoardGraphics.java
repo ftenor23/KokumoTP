@@ -2,7 +2,7 @@ package TP_Bis.Graphic;
 
 import TP_Bis.entity.Board;
 
-public class BoardGraphics extends Graphics{
+public abstract class BoardGraphics extends Graphics{
 
 
     public static void printOwnBoard(Board board){

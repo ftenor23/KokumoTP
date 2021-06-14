@@ -69,7 +69,9 @@ public class PlayerManager {
 
                 }
                 playerWon = executeAction(me, enemy, id, action);
-
+                if(playerWon){
+                    return true;
+                }
             }
 
         }

@@ -2,7 +2,7 @@ package TP_Bis.Graphic;
 
 import TP_Bis.Manager.BoardManager;
 
-public class SoldierGraphics extends Graphics{
+public abstract class SoldierGraphics extends Graphics{
     public static void positionSoldiers(){
         System.out.println("Posicionar soldados:\n");
     }

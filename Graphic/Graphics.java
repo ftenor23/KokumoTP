@@ -44,11 +44,20 @@ public abstract class Graphics {
         System.out.println("Seleccione una opcion:");
         System.out.println("1) Jugar como Host.");
         System.out.println("2) Jugar como invitado");
-        System.out.println("3) Leer las reglas del juego.");
-        System.out.println("4) Salir.");
+        System.out.println("3) Jugar en la misma pc");
+        System.out.println("4) Leer las reglas del juego.");
+        System.out.println("5) Salir.");
     }
 
     public static void printLine(){
         System.out.println(" ");
+    }
+
+    public static void enterPlayerName(int id){
+        System.out.println("Ingrese el nombre del jugador numero " + id + ": ");
+    }
+
+    public static void playerWon(String playerName){
+        System.out.println("Gano " + playerName + "!");
     }
 }

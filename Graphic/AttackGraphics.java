@@ -1,6 +1,6 @@
 package TP_Bis.Graphic;
 
-public class AttackGraphics extends Graphics{
+public abstract class AttackGraphics extends Graphics{
 
     //ATTACKMANAGER
     public static void printSelectPositionToAttackMessage(){

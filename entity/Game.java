@@ -8,7 +8,6 @@ import TP_Bis.Server_Client.Server;
 
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Game {
     private Player playerOne;
@@ -17,8 +16,9 @@ public class Game {
     private boolean showTitle;
     private final static int PLAY_AS_HOST = 1;
     private final static int PLAY_AS_CLIENT=2;
-    private final static int SHOW_INSTRUCTIONS=3;
-    private final static int EXIT_GAME=4;
+    private final static int SINGLE_PLAY=3;
+    private final static int SHOW_INSTRUCTIONS=4;
+    private final static int EXIT_GAME=5;
 
     public Game() {
         this.showTitle=true;
@@ -62,12 +62,15 @@ public class Game {
         if(action!=EXIT_GAME){
             if(action==PLAY_AS_HOST){
                 playAsHost();
-                //play();
+                //singlePlay();
             }if (action==PLAY_AS_CLIENT){
                 playAsClient();
                 Graphics.thanksForPlaying();
                 return;
-            } if(action==SHOW_INSTRUCTIONS) {
+            }if(action==SINGLE_PLAY){
+                singlePlay();
+            }
+            if(action==SHOW_INSTRUCTIONS) {
                 printInstructions();
             }
             execute();
@@ -92,22 +95,31 @@ public class Game {
     private void printOptions(){
         Graphics.printOptions();
     }
-    private void play(){
-        Scanner nameIn=new Scanner(System.in);
-        System.out.println("Ingrese el nombre del jugador 1: ");
-        String namePlayerOne= nameIn.nextLine();
-        System.out.println("Ingrese el nombre del jugador 2: ");
-        String namePlayerTwo=nameIn.nextLine();
+    private void singlePlay(){
+        final int pOne=1;
+        final int pTwo=2;
+        Graphics.enterPlayerName(pOne);
+        String namePlayerOne= EnterData.nextLine();
+        Graphics.enterPlayerName(pTwo);
+        String namePlayerTwo=EnterData.nextLine();
         playerOne=new Player(namePlayerOne);
         playerTwo=new Player(namePlayerTwo);
 
         while(!gameOver());
 
         if(playerOneLost()){
-            System.out.println("Gano " + playerTwo.getPlayerName() + "!!");
+            Graphics.playerWon(playerTwo.getPlayerName());
+
         }
         if(playerTwoLost()){
-            System.out.println("Gano " + playerOne.getPlayerName() + "!!");
+            Graphics.playerWon(playerOne.getPlayerName());
+
+        }
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return;
     }

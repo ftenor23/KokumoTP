@@ -1,6 +1,6 @@
 package TP_Bis.Graphic;
 
-public class MoveGraphics extends Graphics{
+public abstract class MoveGraphics extends Graphics{
     public static void invalidPosition() {
         System.out.println("Posicion invalida");
     }
