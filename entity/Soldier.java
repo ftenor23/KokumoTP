@@ -58,6 +58,10 @@ public class Soldier {
         isDead = dead;
     }
 
+    public int getRemainingLives() {
+        return remainingLives;
+    }
+
     public void setPosition(int position) {
         this.position = position;
     }

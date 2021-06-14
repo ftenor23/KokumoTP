@@ -62,6 +62,7 @@ public class Game {
         if(action!=EXIT_GAME){
             if(action==PLAY_AS_HOST){
                 playAsHost();
+                //play();
             }if (action==PLAY_AS_CLIENT){
                 playAsClient();
                 Graphics.thanksForPlaying();
@@ -91,7 +92,7 @@ public class Game {
     private void printOptions(){
         Graphics.printOptions();
     }
-    /*private void play(){
+    private void play(){
         Scanner nameIn=new Scanner(System.in);
         System.out.println("Ingrese el nombre del jugador 1: ");
         String namePlayerOne= nameIn.nextLine();
@@ -109,7 +110,7 @@ public class Game {
             System.out.println("Gano " + playerOne.getPlayerName() + "!!");
         }
         return;
-    }*/
+    }
 
    public void playAsHost(){
         Server server = new Server();

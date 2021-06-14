@@ -18,7 +18,6 @@ public class MoveManager {
 
     public void moveSoldier(Player player, int id){
         MoveValidator moveValidator = new MoveValidator();
-        Scanner in = new Scanner(System.in);
         final int MIN_MOVE = 1;
         final int MAX_MOVE = 4;
         int position = getSoldierPosition(player,id);
