@@ -7,6 +7,7 @@ import TP_Bis.Manager.GameManager;
 import TP_Bis.Manager.PlayerManager;
 import TP_Bis.entity.Data;
 import TP_Bis.entity.Player;
+import TP_Bis.validator.IPValidator;
 import com.google.gson.Gson;
 
 import java.net.*;
@@ -25,8 +26,16 @@ public class Client {
         // servidor al que accederemos ingresando su ip
         // y que escucha en el puerto 4444
         try {
-            ClientGraphics.enterHostIP();
-            String ip = EnterData.nextLine();
+            boolean ipIsValid=false;
+            String ip=new String();
+            while(!ipIsValid) {
+                ClientGraphics.enterHostIP();
+                ip = EnterData.nextLine();
+                ipIsValid= IPValidator.ipIsValid(ip);
+                if(!ipIsValid){
+                    ClientGraphics.ipNotValid(ip);
+                }
+            }
             socketClient = new Socket(ip, 4444);
             // Obtenemos el canal de entrada
             input = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));

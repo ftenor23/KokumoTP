@@ -110,4 +110,6 @@ public class ClientManager {
         //si el juego se termino, lo guardamos en nuestra variable para poder ejecutar los ciclos
         gameOver = data.isGameOver();
     }
+
+
 }

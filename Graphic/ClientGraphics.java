@@ -13,4 +13,7 @@ public abstract class ClientGraphics extends ServerGraphics{
         System.out.println("Estableciendo conexion con el host...");
     }
 
+    public static void ipNotValid(String ip){
+        System.out.println("La ip: " + ip + " no es valida, vuelva a ingresarla correctamente.");
+    }
 }
