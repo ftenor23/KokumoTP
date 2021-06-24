@@ -36,4 +36,9 @@ public abstract class ServerGraphics extends Graphics{
     public static void waitingEnemyTurn(String enemyName){
         System.out.println("Esperando turno "+enemyName + "...");
     }
+
+    public static void enterOpponentIp(){
+        System.out.println("Ingrese la ip de su oponente:");
+    }
 }
+

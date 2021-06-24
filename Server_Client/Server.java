@@ -1,18 +1,15 @@
 package TP_Bis.Server_Client;
 import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.ServerGraphics;
-import TP_Bis.Manager.GameManager;
-import TP_Bis.Manager.PlayerManager;
-import TP_Bis.Manager.ServerManager;
+//import TP_Bis.Manager.ConnectionManager;
 import TP_Bis.entity.Data;
 import TP_Bis.entity.Player;
 import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
 
-public class Server{
+/*public class Server{
     public static final int PORT = 4444;
 
     //public static void main(String[] args) throws IOException {
@@ -59,21 +56,21 @@ public class Server{
     }
 
     private static boolean hostWon(Player host, Player client){
-        return ServerManager.hostWon(host,client);
+        return ConnectionManager.hostWon(host,client);
     }
 
     private static void gameOver(Player host, Player client, Data data, Gson gson, String str, PrintWriter output){
         //imprimimos mensaje y enviamos datos a cliente para finalizar la partida
         ServerGraphics.gameOver();
-            ServerManager.gameOver(host,client,data,gson,str,output);
+            ConnectionManager.gameOver(host,client,data,gson,str,output);
     }
 
     private static void execute(BufferedReader input,Player host, Player client,
                                 PrintWriter output) throws IOException {
         //ejecutamos un ciclo hasta que alguno de los dos jugadores pierda
-        ServerManager.execute(input,host,client,output);
+        ConnectionManager.execute(input,host,client,output);
     }
 
-}
+}*/
 
 

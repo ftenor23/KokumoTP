@@ -1,6 +1,9 @@
 package TP_Bis.Manager;
 
 import TP_Bis.Graphic.ClientGraphics;
+import TP_Bis.Graphic.Graphics;
+import TP_Bis.Server_Client_Bis.Client;
+import TP_Bis.Server_Client_Bis.Server;
 import TP_Bis.entity.Data;
 import TP_Bis.entity.Player;
 import com.google.gson.Gson;
@@ -10,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientManager {
+/*public class ClientManager {
 
     public static boolean hostWon(Player host, Player client) {
         GameManager gameManager = new GameManager(host, client);
@@ -25,8 +28,7 @@ public class ClientManager {
         socketClient.close();
     }
 
-    public static void gameOver(Player host, Player clientPlayer, PrintWriter output,
-                                 BufferedReader input, String message, Data data, Gson gson) throws InterruptedException, IOException {
+    public void gameOver(Server server, Client client, Player host, Player clientPlayer, String message, Data data, Gson gson) throws InterruptedException, IOException {
 
         if (hostWon(host, clientPlayer)) {
             ClientGraphics.lose(host.getPlayerName());
@@ -34,9 +36,10 @@ public class ClientManager {
             ClientGraphics.victory();
         }
         ClientGraphics.serverClosing();
-        output.println(message);
+
+        server.setMessage(message);
         // Envía a la salida estándar la respuesta del servidor
-        message = input.readLine();
+        message = waitingOponent(client); //verificar, me parece que no es necesario
         data = gson.fromJson(message, Data.class);
         clientPlayer.setMyBoard(data.getClientBoard());
         host.setMyBoard(data.getHostBoard());
@@ -50,8 +53,8 @@ public class ClientManager {
         data.setGameOver(gameOver);
     }
 
-    public static void execute(Player clientPlayer, Player host, Data data,
-                                PrintWriter output, BufferedReader input) throws IOException, InterruptedException {
+    public void execute(Player clientPlayer, Player host, Data data,
+                               Server server, Client client) throws IOException, InterruptedException {
         //Ejecuta juego como cliente hasta que uno de los dos jugadores pierde
 
         boolean gameOver = false;
@@ -68,10 +71,11 @@ public class ClientManager {
 
             if (gameOver) {
 
-                gameOver(host, clientPlayer, output, input, message, data, gson);
+                gameOver(server, client,host, clientPlayer, message, data, gson);
 
                 return;
             }
+            server.setMessage("waiting");
 
             gameOver = playerManager.turn(clientPlayer, host);
 
@@ -81,16 +85,16 @@ public class ClientManager {
             message = gson.toJson(data);
 
             if (gameOver) {
-                gameOver(host, clientPlayer, output, input, message, data, gson);
+                gameOver(server, client,host, clientPlayer, message, data, gson);
                 return;
             } else {
                 ClientGraphics.waitingEnemyTurn(host.getPlayerName());
             }
 
             // La envia al servidor
-            output.println(message);
+            server.setMessage(message);
             // Leemos el mensaje del server y lo convertimos a nuestra clase Data
-            message = input.readLine();
+            message = waitingOponent(client);
             data = gson.fromJson(message, Data.class);
             setNewValues(clientPlayer, host, data, gameOver);
 
@@ -111,5 +115,22 @@ public class ClientManager {
         gameOver = data.isGameOver();
     }
 
+    public String waitingOponent(Client client){
+        String response=null;
+        try{
+            response = client.receiveMessage();
+            while(response.equals("waiting")){//espero a que cambie el estado en server cliente
+                try{
+                    Thread.sleep(500);
+                }catch(Exception e) {
+                    response = client.receiveMessage();
+                }
+            }
+        }catch (Exception e){
+            Graphics.printException(e);
+        }
+        return response;
+    }
 
-}
+
+}*/

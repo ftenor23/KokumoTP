@@ -1,10 +1,14 @@
 package TP_Bis.entity;
 
 import TP_Bis.DataIn.EnterData;
+import TP_Bis.Graphic.ClientGraphics;
 import TP_Bis.Graphic.Graphics;
+import TP_Bis.Graphic.ServerGraphics;
+import TP_Bis.Manager.GameManager;
 import TP_Bis.Manager.PlayerManager;
-import TP_Bis.Server_Client.Client;
-import TP_Bis.Server_Client.Server;
+
+
+import TP_Bis.validator.IPValidator;
 
 
 import java.io.IOException;
@@ -61,12 +65,12 @@ public class Game {
         }
         if(action!=EXIT_GAME){
             if(action==PLAY_AS_HOST){
-                playAsHost();
+                play(true);
                 //singlePlay();
             }if (action==PLAY_AS_CLIENT){
-                playAsClient();
-                Graphics.thanksForPlaying();
-                return;
+                play(false);
+                /*Graphics.thanksForPlaying();
+                return;*/
             }if(action==SINGLE_PLAY){
                 singlePlay();
             }
@@ -124,22 +128,37 @@ public class Game {
         return;
     }
 
-   public void playAsHost(){
+   /*public void playAsHost(){
+
+
+
         Server server = new Server();
         try {
             server.run();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    public void playAsClient(){
-        Client client = new Client();
+    public void play(boolean runAsHost){
+        GameManager gameManager = new GameManager();
+        boolean ipIsValid=false;
+        String oponentIp=new String();
+        while(!ipIsValid) {
+            ServerGraphics.enterOpponentIp();
+            oponentIp = EnterData.nextLine();
+            ipIsValid= IPValidator.ipIsValid(oponentIp);
+            if(!ipIsValid){
+                ClientGraphics.ipNotValid(oponentIp);
+            }
+        }
+        gameManager.startGame(runAsHost,oponentIp);
+        /*Client client = new Client();
         try {
             client.run();
         } catch (IOException e) {
             Graphics.printException(e);
-        }
+        }*/
     }
     public static void main(String args[]) {
 

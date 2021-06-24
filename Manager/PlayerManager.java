@@ -82,7 +82,12 @@ public class PlayerManager {
     }
 
 
-    private void printMyBoard(Board board) {
+    /*private void printMyBoard(Board board) {
+        System.out.println("Mi tablero: ");
+        boardManager.printOwnBoard(board);
+    }*/
+
+    public void printMyBoard(Board board) {
         System.out.println("Mi tablero: ");
         boardManager.printOwnBoard(board);
     }
