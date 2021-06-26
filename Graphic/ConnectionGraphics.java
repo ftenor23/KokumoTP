@@ -2,7 +2,7 @@ package TP_Bis.Graphic;
 
 import java.net.Socket;
 
-public abstract class ServerGraphics extends Graphics{
+public abstract class ConnectionGraphics extends Graphics{
     public static void showIp(String ip){
         System.out.println("La ip de este equipo es: " + ip);
     }
@@ -34,7 +34,7 @@ public abstract class ServerGraphics extends Graphics{
     }
 
     public static void waitingEnemyTurn(String enemyName){
-        System.out.println("Esperando turno "+enemyName + "...");
+        System.out.println("Esperando turno de "+enemyName + "...");
     }
 
     public static void enterOpponentIp(){

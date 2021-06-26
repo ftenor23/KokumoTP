@@ -45,7 +45,7 @@ public class Client {
             //recibo JSON
             result = s.hasNext() ? s.next() : "";
 
-            System.out.println("Resultado: " +result);
+
         }catch (Exception ex){
             System.out.println("Conexion perdida... espere un momento");
             //ex.getMessage();

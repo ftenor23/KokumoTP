@@ -1,17 +1,5 @@
 package TP_Bis.Manager;
 
-import TP_Bis.Graphic.Graphics;
-import TP_Bis.Graphic.ServerGraphics;
-import TP_Bis.Server_Client_Bis.Client;
-import TP_Bis.Server_Client_Bis.Server;
-import TP_Bis.entity.Data;
-import TP_Bis.entity.Player;
-import com.google.gson.Gson;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 //public class ConnectionManager {
    /* public static boolean hostWon(Player host, Player client){
         GameManager gameManager=new GameManager(host, client);

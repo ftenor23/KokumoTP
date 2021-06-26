@@ -164,6 +164,7 @@ public class PlayerManager {
                 playerWon = false;
                 break;
         }
+        printMyBoard(me.getBoard());
         printEnemyBoard(enemy.getBoard());
         return playerWon;
 

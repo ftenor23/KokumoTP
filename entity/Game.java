@@ -3,15 +3,12 @@ package TP_Bis.entity;
 import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.ClientGraphics;
 import TP_Bis.Graphic.Graphics;
-import TP_Bis.Graphic.ServerGraphics;
+import TP_Bis.Graphic.ConnectionGraphics;
 import TP_Bis.Manager.GameManager;
 import TP_Bis.Manager.PlayerManager;
 
 
 import TP_Bis.validator.IPValidator;
-
-
-import java.io.IOException;
 
 public class Game {
     private Player playerOne;
@@ -145,7 +142,7 @@ public class Game {
         boolean ipIsValid=false;
         String oponentIp=new String();
         while(!ipIsValid) {
-            ServerGraphics.enterOpponentIp();
+            ConnectionGraphics.enterOpponentIp();
             oponentIp = EnterData.nextLine();
             ipIsValid= IPValidator.ipIsValid(oponentIp);
             if(!ipIsValid){

@@ -1,9 +1,6 @@
 package TP_Bis.Server_Client_Bis;
 
-import TP_Bis.DataIn.EnterData;
-import TP_Bis.Graphic.Graphics;
-import TP_Bis.Graphic.ServerGraphics;
-import TP_Bis.Manager.PlayerManager;
+import TP_Bis.Graphic.ConnectionGraphics;
 //import TP_Bis.Manager.ConnectionManager;
 import TP_Bis.entity.Data;
 import TP_Bis.entity.Player;
@@ -11,7 +8,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 public class Server {
@@ -76,7 +72,7 @@ public class Server {
 
     private static void gameOver(Player host, Player client, Data data, Gson gson, String str, PrintWriter output){
         //imprimimos mensaje y enviamos datos a cliente para finalizar la partida
-        ServerGraphics.gameOver();
+        ConnectionGraphics.gameOver();
         //ConnectionManager.gameOver(host,client,data,gson,str,output);
 
     }
@@ -131,7 +127,7 @@ public class Server {
     }
 
     //se pasa a game manager
-    public String waitingOponent(Client client){
+   /* public String waitingOponent(Client client){
         String response=null;
         try{
             response = client.receiveMessage();
@@ -147,7 +143,7 @@ public class Server {
             Graphics.printException(e);
         }
         return response;
-    }
+    }*/
 
     /*Turno jugador
             posicionar soldaos=>envio a server para validar
