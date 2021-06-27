@@ -1,6 +1,8 @@
-package TP_Bis.entity;
+package TP_Bis.Exchange;
 
-public class Data {
+import TP_Bis.entity.Board;
+
+public class DataExchange {
     /*Esta clase es la que utilizamos para intercambiar datos entre cliente y servidor*/
 
     private Board hostBoard;

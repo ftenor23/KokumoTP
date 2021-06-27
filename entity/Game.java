@@ -1,6 +1,7 @@
 package TP_Bis.entity;
 
 import TP_Bis.DataIn.EnterData;
+import TP_Bis.Graphic.GameGraphics;
 import TP_Bis.Graphic.Graphics;
 import TP_Bis.Graphic.ConnectionGraphics;
 import TP_Bis.Manager.GameManager;
@@ -9,13 +10,15 @@ import TP_Bis.Manager.PlayerManager;
 
 import TP_Bis.validator.IPValidator;
 
+import java.net.BindException;
+
 public class Game {
     private Player playerOne;
     private Player playerTwo;
     private PlayerManager playerManager;
     private boolean showTitle;
-    private final static int PLAY_AS_HOST = 1;
-    private final static int PLAY_AS_CLIENT=2;
+    private final static int CREATE_GAME = 1;
+    private final static int JOIN_GAME =2;
     private final static int SINGLE_PLAY=3;
     private final static int SHOW_INSTRUCTIONS=4;
     private final static int EXIT_GAME=5;
@@ -38,16 +41,9 @@ public class Game {
     private boolean playerTwoLost(){
         return playerManager.mySoldiersAreDead(playerTwo);
     }
-    public Player getPlayerOne() {
-        return playerOne;
-    }
-
-    public Player getPlayerTwo() {
-        return playerTwo;
-    }
 
     private void printInstructions(){
-        Graphics.printInstructions();
+        GameGraphics.printInstructions();
     }
 
 
@@ -55,35 +51,35 @@ public class Game {
 
         int action=showOptions();
 
-        if(action<PLAY_AS_HOST || action>EXIT_GAME){
+        if(action< CREATE_GAME || action>EXIT_GAME){
             Graphics.invalidSelection();
             execute();
         }
         if(action!=EXIT_GAME){
-            if(action==PLAY_AS_HOST){
+            if(action== CREATE_GAME){
                 play(true);
-                //singlePlay();
-            }if (action==PLAY_AS_CLIENT){
+            }if (action== JOIN_GAME){
                 play(false);
-                /*Graphics.thanksForPlaying();
-                return;*/
             }if(action==SINGLE_PLAY){
                 singlePlay();
             }
             if(action==SHOW_INSTRUCTIONS) {
                 printInstructions();
             }
+            if(action!=SHOW_INSTRUCTIONS){
+                GameGraphics.cleanConsole();
+            }
             execute();
         }
         if(action==EXIT_GAME){
-            Graphics.thanksForPlaying();
+            GameGraphics.thanksForPlaying();
         }
         return;
     }
 
     private int showOptions(){
         if(showTitle) {
-            Graphics.showTitle();
+            GameGraphics.showTitle();
             this.showTitle=false;
         }
         printOptions();
@@ -93,14 +89,14 @@ public class Game {
     }
 
     private void printOptions(){
-        Graphics.printOptions();
+        GameGraphics.printOptions();
     }
     private void singlePlay(){
         final int pOne=1;
         final int pTwo=2;
-        Graphics.enterPlayerName(pOne);
+        GameGraphics.enterPlayerName(pOne);
         String namePlayerOne= EnterData.nextLine();
-        Graphics.enterPlayerName(pTwo);
+        GameGraphics.enterPlayerName(pTwo);
         String namePlayerTwo=EnterData.nextLine();
         playerOne=new Player(namePlayerOne);
         playerTwo=new Player(namePlayerTwo);
@@ -108,11 +104,11 @@ public class Game {
         while(!gameOver());
 
         if(playerOneLost()){
-            Graphics.playerWon(playerTwo.getPlayerName());
+            GameGraphics.playerWon(playerTwo.getPlayerName());
 
         }
         if(playerTwoLost()){
-            Graphics.playerWon(playerOne.getPlayerName());
+            GameGraphics.playerWon(playerOne.getPlayerName());
 
         }
 
@@ -124,37 +120,28 @@ public class Game {
         return;
     }
 
-   /*public void playAsHost(){
-
-
-
-        Server server = new Server();
-        try {
-            server.run();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     public void play(boolean runAsHost){
         GameManager gameManager = new GameManager();
         boolean ipIsValid=false;
-        String oponentIp=new String();
+        String oponentIp="";
         while(!ipIsValid) {
-            ConnectionGraphics.enterOpponentIp();
+            //pedimos la ip del oponente
+            ConnectionGraphics.enterEnemyIp(runAsHost);
             oponentIp = EnterData.nextLine();
+            //verificamos si la ip es valida
             ipIsValid= IPValidator.ipIsValid(oponentIp);
             if(!ipIsValid){
                 ConnectionGraphics.ipNotValid(oponentIp);
             }
         }
-        gameManager.startGame(runAsHost,oponentIp);
-        /*Client client = new Client();
         try {
-            client.run();
-        } catch (IOException e) {
+            gameManager.startGame(runAsHost, oponentIp);
+        }catch (BindException e){
             Graphics.printException(e);
-        }*/
+        }catch(Exception e){
+            Graphics.printException(e);
+        }
     }
     public static void main(String args[]) {
 

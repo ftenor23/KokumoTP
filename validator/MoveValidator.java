@@ -4,19 +4,14 @@ import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
 
 public class MoveValidator {
-    private final static int MIN_MOVE = 1;
-    private final static int MAX_MOVE =4;
-    private Board board=new Board();
+    private final static int BOARD_LENGHT=Board.getBoardSize();
     public boolean isValid(int position){
         return !(position<0);
     }
 
-    public boolean moveIsValid(int move){
-        return !(move<MIN_MOVE || move>MAX_MOVE);
-    }
 
     public boolean validPosition(int newPosition){
-        return newPosition>0 && newPosition<board.getMatrix().length;
+        return newPosition>-1 && newPosition<BOARD_LENGHT;
     }
 
     public boolean moveIsValid(int move, int position){
@@ -35,9 +30,9 @@ public class MoveValidator {
         || position+1 == 4 || position+1 == 5) && move == UP){
             return false; //si esta arriba, no puede moverse mas arriba
         }
-        if((position+1 == 25 || position+1 == 24 || position+1 == 23
-                || position+1 == 22 || position+1 == 21) && move == DOWN){
-            return false; //si esta abajo, no puede ir mas abajo
+        if((position+1 == BOARD_LENGHT || position+1 == BOARD_LENGHT-1 || position+1 == BOARD_LENGHT-2
+                || position+1 == BOARD_LENGHT-3 || position+1 == BOARD_LENGHT-4) && move == DOWN){
+            return false; //si esta en la ultima fila, no puede ir mas abajo
         }
         if(move==-1){
             return false;

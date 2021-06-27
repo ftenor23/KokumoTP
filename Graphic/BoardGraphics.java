@@ -1,7 +1,6 @@
 package TP_Bis.Graphic;
 
 import TP_Bis.entity.Board;
-import TP_Bis.entity.Player;
 
 public abstract class BoardGraphics extends Graphics{
 

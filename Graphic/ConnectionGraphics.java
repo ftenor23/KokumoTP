@@ -1,18 +1,9 @@
 package TP_Bis.Graphic;
 
-import java.net.Socket;
 
 public abstract class ConnectionGraphics extends Graphics{
-    public static void showIp(String ip){
-        System.out.println("La ip de este equipo es: " + ip);
-    }
-    public static void waitingForClient(){
-        System.out.println("Esperando al cliente...");
-    }
 
-    public static void connectionAccepted(Socket client){
-        System.out.println("Conexión aceptada: " + client.getInetAddress().getHostAddress());
-    }
+
     public static void gameOver(){
         System.out.println("Juego terminado:");
     }
@@ -29,6 +20,9 @@ public abstract class ConnectionGraphics extends Graphics{
         System.out.println("El servidor se cerrara en 10 segundos...");
     }
 
+    public static void backToMainPage(){
+        System.out.println("Volviendo a la pantalla inicial...");
+    }
     public static void enterName(){
         System.out.println("Ingrese su nombre: ");
     }
@@ -37,8 +31,20 @@ public abstract class ConnectionGraphics extends Graphics{
         System.out.println("Esperando turno de "+enemyName + "...");
     }
 
-    public static void enterOpponentIp(){
-        System.out.println("Ingrese la ip de su oponente:");
+    public static void enterEnemyIp(boolean runAsHost){
+        if(runAsHost){
+            inviteOponent();
+        }else{
+            joinGame();
+        }
+    }
+
+    private static void inviteOponent(){
+        System.out.println("Ingrese la ip de su invitado:");
+    }
+
+    private static void joinGame(){
+        System.out.println("Ingrese la ip del host: ");
     }
 
     public static void closeGameConectionLost(){
@@ -54,7 +60,7 @@ public abstract class ConnectionGraphics extends Graphics{
     }
 
     public static void conectionLost(){
-        System.out.println("No se puede establecer conexion con el host. Aguarde un momento...");
+        System.out.println("No se puede establecer conexion con el oponente. Aguarde un momento...");
     }
 
     public static void cantConnectWithServer(){

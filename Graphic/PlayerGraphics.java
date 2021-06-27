@@ -3,8 +3,8 @@ package TP_Bis.Graphic;
 import TP_Bis.entity.Player;
 
 public abstract class PlayerGraphics extends Graphics{
-    public static void playerTurn(Player player){
-        System.out.println("Turno de " + player.getPlayerName() + "\n");
+    public static void playerTurn(String playerName){
+        System.out.println("Tu turno, "+ playerName+ ":\n");
     }
 
     public static void selectMoveMenu(Player player,int id){
@@ -37,6 +37,5 @@ public abstract class PlayerGraphics extends Graphics{
         }else{
             System.out.println("El soldado " + (id) + " murio.");
         }
-        return;
     }
 }

@@ -1,69 +1,51 @@
 package TP_Bis.Server_Client;
-//import TP_Bis.Manager.ConnectionManager;
 
+import TP_Bis.Graphic.ConnectionGraphics;
 
-/*public class Server{
-    public static final int PORT = 4444;
+import com.sun.net.httpserver.HttpServer;
 
-    //public static void main(String[] args) throws IOException {
-      public void run()throws IOException{
-        // Establece el puerto en el que escucha peticiones
-        String ip = InetAddress.getLocalHost().getHostAddress();
-        ServerGraphics.showIp(ip);
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(PORT);
-        } catch (IOException e) {
-           ServerGraphics.printException(e);
-            System.exit(-1);
+import java.io.*;
+import java.net.InetSocketAddress;
+
+public class Server {
+    private static HttpServer server;
+    private final static int HOST_PORT =8008;
+    private final static int CLIENT_PORT=9009;
+    private final int port;
+    private final ContextHandler contextHandler;
+    //InetSocketAddress address; //direccion (mi ip)
+
+    public Server(boolean runAsHost){
+        if(runAsHost){
+            this.port= HOST_PORT;
+        } else {
+            this.port=CLIENT_PORT;
         }
 
-        Socket socketClient = null;
-        BufferedReader input = null;
-        PrintWriter output = null;
-
-        ServerGraphics.waitingForClient();
         try {
-            // Se bloquea hasta que recibe alguna petición de un cliente
-            // abriendo un socket para el cliente
-            socketClient = serverSocket.accept();
-            ServerGraphics.connectionAccepted(socketClient); // Establece canal de entrada
-            input = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
-            // Establece canal de salida
-            output = new PrintWriter(new BufferedWriter(new
-                    OutputStreamWriter(socketClient.getOutputStream())),true);
-
-            ServerGraphics.enterName();
-            String hostName= EnterData.nextLine();
-            Player host= new Player(hostName);
-            Player client = new Player(" ");
-
-            execute(input,host,client,output);
-        } catch (IOException e) {
-            ServerGraphics.printException(e);
+            server = HttpServer.create(new InetSocketAddress(port), 0);
+        } catch (IOException e){
+            e.printStackTrace();
         }
-        output.close();
-        input.close();
-        socketClient.close();
-        serverSocket.close();
+
+        contextHandler=new ContextHandler();
+
+        server.createContext("/", contextHandler);
+        server.start();
+        //setMessage("waiting");
+        ConnectionGraphics.serverStartedOnPort(port);
     }
 
-    private static boolean hostWon(Player host, Player client){
-        return ConnectionManager.hostWon(host,client);
+    //envio mensaje al servidor
+    public void setMessage(String message){
+        contextHandler.setResponse(message);
     }
 
-    private static void gameOver(Player host, Player client, Data data, Gson gson, String str, PrintWriter output){
-        //imprimimos mensaje y enviamos datos a cliente para finalizar la partida
-        ServerGraphics.gameOver();
-            ConnectionManager.gameOver(host,client,data,gson,str,output);
+
+    public static void stop(){
+        server.stop(0);
     }
 
-    private static void execute(BufferedReader input,Player host, Player client,
-                                PrintWriter output) throws IOException {
-        //ejecutamos un ciclo hasta que alguno de los dos jugadores pierda
-        ConnectionManager.execute(input,host,client,output);
-    }
-
-}*/
 
 
+}

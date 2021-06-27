@@ -2,17 +2,17 @@ package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.SoldierGraphics;
-import TP_Bis.entity.Board;
+
 import TP_Bis.entity.Player;
-import TP_Bis.entity.Soldier;
+
 import TP_Bis.validator.SoldierValidator;
 
-import java.util.Scanner;
+
 
 public class SoldierManager {
-    private static int INITIAL_POSITION = -1;
-    private BoardManager boardManager = new BoardManager();
-    private SoldierValidator soldierValidator = new SoldierValidator();
+    private final static int INITIAL_POSITION = -1;
+    private final BoardManager boardManager = new BoardManager();
+    private final SoldierValidator soldierValidator = new SoldierValidator();
 
     public void setSoldiers(Player player){
 
@@ -20,7 +20,7 @@ public class SoldierManager {
         int positionOne=INITIAL_POSITION;
         int positionTwo=INITIAL_POSITION;
         int positionThree=INITIAL_POSITION;
-        Scanner in = new Scanner(System.in);
+        //Scanner in = new Scanner(System.in);
         boolean arrayOutOfBounds = true;
         while(arrayOutOfBounds) {
             SoldierGraphics.enterCommanderPosition();
@@ -52,7 +52,4 @@ public class SoldierManager {
         player.setFirstTurn(false);
     }
 
-    public SoldierValidator getSoldierValidator() {
-        return soldierValidator;
-    }
 }

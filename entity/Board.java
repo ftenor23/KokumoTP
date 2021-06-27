@@ -1,9 +1,7 @@
 package TP_Bis.entity;
 
 
-import TP_Bis.Graphic.BoardGraphics;
-
-import java.util.Scanner;
+import TP_Bis.Graphic.Graphics;
 
 public class Board {
     private Grid[] matrix;
@@ -25,9 +23,6 @@ public class Board {
         return NUMBER_OF_SOLDIERS;
     }
 
-
-
-
     public int getSoldierPosition(int id){
 
         for (int i = 0; i < soldiers.length; i++) {
@@ -43,22 +38,25 @@ public class Board {
     }
 
     public Soldier getSoldier(int id){
-        for(int i=0; i<soldiers.length;i++){
-            if(soldiers[i].getId()==id){
-                return soldiers[i];
-            }
+
+        try{
+            return soldiers[id-1];
+        }catch(ArrayIndexOutOfBoundsException e){
+            Graphics.printException(e);
+        }catch (Exception e){
+            Graphics.printException(e);
         }
         return null;
     }
 
     public boolean allSoldiersAreDead(){
-        boolean areDead = true;
+
         for(int i=0; i<soldiers.length; i++){
             if(!soldiers[i].isDead()){
                 return false;
             }
         }
-        return areDead;
+        return true;
     }
 
     public boolean commanderIsDead(){
@@ -78,13 +76,9 @@ public class Board {
         return LINE_LENGHT;
     }
 
-    public int soldiersAlive(){
-        int soldiersAlive=0;
-        for(int i=0;i<soldiers.length;i++){
-            if(!soldiers[i].isDead()){
-                soldiersAlive++;
-            }
-        }
-        return soldiersAlive;
+    public static int getBoardSize() {
+        return BOARD_SIZE;
     }
+
+
 }

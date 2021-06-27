@@ -1,6 +1,6 @@
 package TP_Bis.validator;
 
-import java.util.Scanner;
+
 
 public class IPValidator {
     public static boolean ipIsValid(String ip){

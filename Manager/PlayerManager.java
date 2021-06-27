@@ -2,25 +2,25 @@ package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.BoardGraphics;
+import TP_Bis.Graphic.GameGraphics;
 import TP_Bis.Graphic.PlayerGraphics;
 import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
-import TP_Bis.entity.Soldier;
+
 import TP_Bis.validator.ActionValidator;
 
-import java.util.Scanner;
+
 
 public class PlayerManager {
     private boolean commanderIsDead;
-    private BoardManager boardManager;
-    private AttackManager attackManager;
-    private SoldierManager soldierManager;
-    private MoveManager moveManager;
-    private ActionValidator actionValidator;
+    private final BoardManager boardManager;
+    private final AttackManager attackManager;
+    private final SoldierManager soldierManager;
+    private final MoveManager moveManager;
+    private final ActionValidator actionValidator;
     private final static int ATTACK = 1;
     private final static int MOVE_SOLDIER = 2;
     private final static int INVALID_OPTION = -1;
-    private final static int GET_OUT_OF_WHILE = 1;
     //si el comandante muere, los demas no pueden moverse
 
 
@@ -35,7 +35,10 @@ public class PlayerManager {
 
     public boolean turn(Player me, Player enemy) {
         boolean playerWon = false;
-        PlayerGraphics.playerTurn(me);
+        if(!me.isFirstTurn()){
+            GameGraphics.cleanConsole();
+        }
+        PlayerGraphics.playerTurn(me.getPlayerName());
         printMyBoard(me.getBoard());
         printEnemyBoard(enemy.getBoard());
 
@@ -48,7 +51,7 @@ public class PlayerManager {
 
             for (int i = 0; i < soldiersAlive(me); i++) {
                 int action = INVALID_OPTION; //inicializamos con un valor invalido para que se cumpla el ciclo
-                int id = i + 1;
+                int id = i + 1; //el id del soldado es i+1
                 while (action != ATTACK && action != MOVE_SOLDIER && !soldierIsDead(me, id)) {
 
                     PlayerGraphics.selectMoveMenu(me, id);
@@ -70,26 +73,23 @@ public class PlayerManager {
                     }
 
                 }
+                //ejecutamos la jugada y nos devuelve un booleano indicando si el
+                //jugador actual mato a todos los enemigos
                 playerWon = executeAction(me, enemy, id, action);
 
                 if(playerWon){
-                    return true;
+                    return playerWon;
                 }
             }
 
         }
-        //printMyBoard(me.getBoard());
-        //printEnemyBoard(enemy.getBoard());
+
         return playerWon;//mientras devuelva false, siguen jugando
     }
-
-
-
 
     public void printMyBoard(Board board) {
         BoardGraphics.printOwnBoard(board);
     }
-
 
     private void printEnemyBoard(Board enemyBoard) {
         BoardGraphics.showEnemyBoard(enemyBoard);
@@ -97,11 +97,13 @@ public class PlayerManager {
 
     private void setSoldiers(Player player) {
         SoldierManager soldierManager = new SoldierManager();
+        //acomodamos los soldados en el tablero
         soldierManager.setSoldiers(player);
     }
 
 
     private void attackEnemy(Player me, Player enemy, int id) {
+        //dirigimos el ataque
         attackManager.attackEnemy(me, enemy, id);
     }
 
@@ -135,9 +137,6 @@ public class PlayerManager {
         return moveManager.getMoveValidator().soldierCanMove(me, id);
     }
 
-    private boolean canMoveSoldier(Player me, int id) {
-        return !commanderIsDead && moveManager.getMoveValidator().soldierCanMove(me, id);
-    }
 
     private boolean onlyAttack(Player me, int id) {
         return actionValidator.onlyAttack(me, id);
@@ -162,20 +161,19 @@ public class PlayerManager {
                 playerWon = false;
                 break;
         }
-       printMyBoard(me.getBoard());
-        printEnemyBoard(enemy.getBoard());
-
+        if(action!=INVALID_OPTION) {
+            printMyBoard(me.getBoard());
+            printEnemyBoard(enemy.getBoard());
+        }
         return playerWon;
 
     }
 
 
-    public void setBoard(Player player, Board changedBoard) {
-        boardManager.setBoard(player, changedBoard);
-    }
-
     private void informSoldiersAttacked(Player player) {
-        if (commanderWasAttacked(player, 1) && player.informCommanderWasAttacked()) {
+        //al inicio de la partida, indicamos si alguno/s soldados
+        //recibieron algun ataque
+        if (commanderWasAttacked(player) && player.informCommanderWasAttacked()) {
             PlayerGraphics.soldierWasAttacked(1);
             player.setInformCommanderWasAttacked(false);
         }
@@ -191,11 +189,10 @@ public class PlayerManager {
             PlayerGraphics.informCommanderIsDead();
             player.setInformCommanderIsDead(false);
         }
-        return;
     }
 
-    private boolean commanderWasAttacked(Player player, int id) {
-        return player.getBoard().getSoldier(id).getRemainingLives() == 1;
+    private boolean commanderWasAttacked(Player player) {
+        return player.getBoard().getSoldier(1).getRemainingLives() == 1;
     }
 
 

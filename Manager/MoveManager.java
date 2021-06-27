@@ -2,15 +2,12 @@ package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.MoveGraphics;
-import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
 import TP_Bis.entity.Soldier;
 import TP_Bis.validator.MoveValidator;
 
-import java.util.Scanner;
-
 public class MoveManager {
-    private MoveValidator moveValidator = new MoveValidator();
+    private final MoveValidator moveValidator = new MoveValidator();
 
     public MoveValidator getMoveValidator() {
         return moveValidator;
@@ -18,14 +15,12 @@ public class MoveManager {
 
     public void moveSoldier(Player player, int id){
         MoveValidator moveValidator = new MoveValidator();
-        final int MIN_MOVE = 1;
-        final int MAX_MOVE = 4;
         int position = getSoldierPosition(player,id);
 
-        if(!moveValidator.isValid(position)){
+       /* if(!moveValidator.isValid(position)){
             MoveGraphics.invalidPosition();//cargar error
             return;
-        }
+        }*/
         //creamos un ciclo hasta que se cumpla la condicion
         int move=-1; //iniciamos en -1
         while(!moveValidator.moveIsValid(move, position)){ //verificar funcion
@@ -41,7 +36,7 @@ public class MoveManager {
     }
 
     private void move(Player player, int position, int soldierId, int move){
-        Soldier soldier = player.getBoard().getSoldier(soldierId);
+        Soldier soldier = getSoldier(player,soldierId);
         int newPosition=-1;
         final int MAX_MOVEMENT=5;//si nos movemos hacia arriba o abajo sumamos 5 grillas
         final int MIN_MOVEMENT=1;//si nos movemos a izq o derecha, 1 sola
@@ -77,7 +72,11 @@ public class MoveManager {
 
         emptyGrid(player,position);
         setSoldierPosition(player,newPosition,soldier);
-        return;
+
+    }
+
+    private Soldier getSoldier(Player player, int soldierId){
+        return player.getBoard().getSoldier(soldierId);
     }
 
     private int getSoldierPosition(Player player, int id){

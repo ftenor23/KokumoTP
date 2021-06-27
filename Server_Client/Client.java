@@ -1,91 +1,74 @@
 package TP_Bis.Server_Client;
 
-/*public class Client {
-    //public static void main(String[] args)  throws IOException {
-      public void run() throws IOException{
-        Socket socketClient = null;
-        BufferedReader input = null;
-        PrintWriter output = null;
-        Scanner in = new Scanner(System.in);
 
-        // Creamos un socket en el lado cliente, enlazado con un
-        // servidor al que accederemos ingresando su ip
-        // y que escucha en el puerto 4444
+import TP_Bis.Graphic.ConnectionGraphics;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
+public class Client {
+    private String enemyIp;
+    private final static int HOST_PORT =8008;
+    private final static int CLIENT_PORT=9009;
+    private int port;
+    private String urlToGo;
+    private boolean connected=false;
+    private boolean connectionLost=false;
+    private boolean showCantConectWithServer=true;
+    private final static String WAITING="waiting";
+
+
+    public Client(String enemyIp, boolean runAsHost) {
+        if(runAsHost){
+            this.port=CLIENT_PORT;
+        }else{
+            this.port=HOST_PORT;
+        }
+        this.enemyIp = enemyIp;
+        this.urlToGo ="http://" + enemyIp + ":" + port;
+    }
+
+    //leo mensaje
+    public String receiveMessage(){
+        String result="null";
+
         try {
-            boolean ipIsValid=false;
-            String ip=new String();
-            while(!ipIsValid) {
-                ClientGraphics.enterHostIP();
-                ip = EnterData.nextLine();
-                ipIsValid= IPValidator.ipIsValid(ip);
-                if(!ipIsValid){
-                    ClientGraphics.ipNotValid(ip);
+            URL url = new URL(urlToGo);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("accept", "application/json");
+            InputStream responseStream = connection.getInputStream();
+
+            Scanner s = new Scanner(responseStream).useDelimiter("\\A");
+            //recibo JSON del oponente
+            result = s.hasNext() ? s.next() : "";
+
+            //si el resultado leido es "waiting", debo seguir esperando
+            if(result.equals(WAITING)){
+                if(!connected){
+                    ConnectionGraphics.conectionAccepted();
+                    connected=true;
+                }else if(connectionLost){
+                    ConnectionGraphics.connectedAgain();
+                    connectionLost=false;
                 }
             }
-            socketClient = new Socket(ip, 4444);
-            // Obtenemos el canal de entrada
-            input = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
-            // Obtenemos el canal de salida
-            output = new PrintWriter(new BufferedWriter(new
-                    OutputStreamWriter(socketClient.getOutputStream())),true);
-        } catch (IOException e) {
-            ClientGraphics.IOException(e);
-            System.exit(-1);
-        }
-        BufferedReader stdIn =
-                new BufferedReader(new InputStreamReader(System.in));
 
-
-        Player host=new Player("host");
-        ClientGraphics.connectingToHost();
-        try{
-            Thread.sleep(2000);
-        }catch (Exception e){
-            System.out.println(e.getLocalizedMessage());
-        }
-        ClientGraphics.enterName();
-        String clientName=EnterData.nextLine();
-        Player clientPlayer = new Player(clientName);
-        Data data =new Data();
-        try {
-            execute(clientPlayer,host,data,output,input);
-        } catch (IOException | InterruptedException e) {
-            Graphics.printException(e);
-        } catch (NullPointerException e){
-            Graphics.printException(e);
-        } catch (Exception e){
+        }catch (Exception ex){
+            if(connected) {
+                if(!connectionLost) {
+                    ConnectionGraphics.conectionLost();
+                    connectionLost = true;
+                }
+            }else if(showCantConectWithServer){
+                ConnectionGraphics.cantConnectWithServer();
+                showCantConectWithServer=false;
+            }
 
         }
-
-        // Libera recursos
-        closeEverything(output,input,stdIn,socketClient);
-    }
-    private static boolean hostWon(Player host, Player client){
-        return ClientManager.hostWon(host, client);
+        return result;
     }
 
-    private static void closeEverything(PrintWriter output, BufferedReader input, BufferedReader stdIn,
-                                 Socket socketClient) throws IOException {
-        ClientManager.closeEverything(output,input,stdIn,socketClient);
-    }
 
-    private static void gameOver(Player host, Player clientPlayer, PrintWriter output,
-                                BufferedReader input, String message, Data data, Gson gson) throws InterruptedException, IOException {
-        ClientManager.gameOver(host,clientPlayer,output,input,message,data,gson);
-    }
-
-    private static void setDataToSend(Data data, Player clientPlayer, Player host, boolean gameOver){
-        ClientManager.setDataToSend(data,clientPlayer,host,gameOver);
-    }
-
-    private static void execute(Player clientPlayer, Player host, Data data,
-                                PrintWriter output, BufferedReader input) throws IOException, InterruptedException {
-        ClientManager.execute(clientPlayer,host,data,output,input);
-    }
-
-    private static void setNewValues(Player clientPlayer, Player host, Data data,
-                                     boolean gameOver){
-        ClientManager.setNewValues(clientPlayer,host,data,gameOver);
-    }
-}*/
-
+}

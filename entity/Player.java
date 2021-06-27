@@ -1,14 +1,9 @@
 package TP_Bis.entity;
 
-import TP_Bis.Manager.PlayerManager;
-
-import java.util.Scanner;
-
 
 public class Player {
     private Board myBoard;
     private String playerName;
-    private Scanner in;
     private boolean firstTurn;
     private boolean commanderIsDead;
     private boolean informCommanderIsDead;

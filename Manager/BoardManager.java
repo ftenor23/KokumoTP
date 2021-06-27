@@ -5,15 +5,14 @@ import TP_Bis.Graphic.BoardGraphics;
 import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
 import TP_Bis.entity.Soldier;
+import TP_Bis.validator.PositionValidator;
 
-import java.util.Scanner;
 
 public class BoardManager {
 
-
+    //La funcion acomoda a los soldados en el tablero en el primer turno
     public void setSoldiers(Board board, int positionOne, int positionTwo, int positionThree, boolean firstTurn){
         //ingresar las posiciones de los soldados
-        Scanner in = new Scanner(System.in);
         int id;
         //Restamos uno a cada posicion para poder acomodarlos correctamente. La posicion uno en realidad es= 0
         positionOne--;
@@ -22,12 +21,12 @@ public class BoardManager {
         for(int i=0; i<board.getNumberOfSoldiers();i++){
             id=i+1;
             if(i==0) {
-                while(board.getMatrix()[positionOne].isOccupied() || arrayOutOfBounds(board,positionOne)){
+                while(board.getMatrix()[positionOne].isOccupied() || arrayOutOfBounds(positionOne)){
                     if(board.getMatrix()[positionOne].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
                         positionOne = EnterData.nextInt() - 1;
                     }
-                    if(arrayOutOfBounds(board,positionOne)){
+                    if(arrayOutOfBounds(positionOne)){
                         BoardGraphics.positionOutOfBounds(id);
                         positionOne= EnterData.nextInt() - 1;
                     }
@@ -35,12 +34,12 @@ public class BoardManager {
                 board.getSoldiers()[i]=new Soldier(true, id, positionOne);
             }
             if(i==1){
-                while(board.getMatrix()[positionTwo].isOccupied() || arrayOutOfBounds(board,positionTwo)){
+                while(board.getMatrix()[positionTwo].isOccupied() || arrayOutOfBounds(positionTwo)){
                     if(board.getMatrix()[positionTwo].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
                         positionTwo = EnterData.nextInt() - 1;
                     }
-                    if(arrayOutOfBounds(board,positionTwo)){
+                    if(arrayOutOfBounds(positionTwo)){
                         BoardGraphics.positionOutOfBounds(id);
                         positionTwo = EnterData.nextInt() - 1;
                     }
@@ -48,12 +47,12 @@ public class BoardManager {
                 board.getSoldiers()[i]=new Soldier(false, id, positionTwo);
             }
             if(i==2){
-                while(board.getMatrix()[positionThree].isOccupied() || arrayOutOfBounds(board,positionThree)){
+                while(board.getMatrix()[positionThree].isOccupied() || arrayOutOfBounds(positionThree)){
                     if(board.getMatrix()[positionThree].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
                         positionThree = EnterData.nextInt() - 1;
                     }
-                    if(arrayOutOfBounds(board,positionThree)){
+                    if(arrayOutOfBounds(positionThree)){
                         BoardGraphics.positionOutOfBounds(id);
                         positionThree = EnterData.nextInt() - 1;
                     }
@@ -78,8 +77,9 @@ public class BoardManager {
         }
     }
 //enviar a validator
-    private boolean arrayOutOfBounds(Board board,int position){
-        return position<0 || position>= board.getMatrix().length;
+    private boolean arrayOutOfBounds(int position){
+
+        return PositionValidator.arrayOutOfBounds(position);
     }
     public void setSoldierPosition(Board board, int position, Soldier soldier, boolean firstTurn) {
 
@@ -118,17 +118,6 @@ public class BoardManager {
         return board.getMatrix().length;
     }
 
-    public int getSoldierPosition(Board board, int id){
-
-        for (int i = 0; i < board.getSoldiers().length; i++) {
-            if(board.getSoldiers()[i].getId()==id){
-                return board.getSoldiers()[i].getPosition();
-            }
-        }
-        return -1;
-    }
-
-
     protected boolean allSoldiersAreDead(Board board){
         for(int i=0; i<board.getSoldiers().length; i++){
             if(!board.getSoldiers()[i].isDead()){
@@ -138,24 +127,9 @@ public class BoardManager {
         return true;
     }
 
-    protected boolean commanderIsDead(Board board){
-        for(int i=0; i<board.getSoldiers().length;i++){
-            if(board.getSoldiers()[i].isCommander() && board.getSoldiers()[i].isDead()){
-                return true;
-            }
-        }
-        return false;
-    }
 
-    protected int soldiersAlive(Board board){
-        int soldiersAlive=0;
-        for(int i=0;i<board.getSoldiers().length;i++){
-            if(!board.getSoldiers()[i].isDead()){
-                soldiersAlive++;
-            }
-        }
-        return soldiersAlive;
-    }
+
+
 
     public void setBoard(Player player, Board board){
         player.setMyBoard(board);
