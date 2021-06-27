@@ -77,7 +77,7 @@ public class BoardManager {
 
         }
     }
-
+//enviar a validator
     private boolean arrayOutOfBounds(Board board,int position){
         return position<0 || position>= board.getMatrix().length;
     }
@@ -97,13 +97,6 @@ public class BoardManager {
         }
     }
 
-    public void printOwnBoard(Board board){
-        BoardGraphics.printOwnBoard(board);
-    }
-
-    public void showEnemyBoard(Board enemyBoard){
-        BoardGraphics.showEnemyBoard(enemyBoard);
-    }
 
     public void attackReceived(Board myBoard,int position) {
         int id = -1;

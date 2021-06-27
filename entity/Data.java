@@ -8,9 +8,18 @@ public class Data {
     private String hostName;
     private String clientName;
     private boolean gameOver;
+    private boolean connectionLost;
 
     public boolean isGameOver() {
         return this.gameOver;
+    }
+
+    public boolean connectionLost() {
+        return connectionLost;
+    }
+
+    public void setConnectionLost(boolean connectionLost) {
+        this.connectionLost = connectionLost;
     }
 
     public void setGameOver(boolean gameOver) {

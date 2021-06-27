@@ -25,5 +25,7 @@ public class MainServer {
         p.printMyBoard(board);*/
         Game game = new Game();
         game.play(true);
+        return;
+
     }
 }

@@ -1,11 +1,13 @@
 package TP_Bis.Graphic;
 
 import TP_Bis.entity.Board;
+import TP_Bis.entity.Player;
 
 public abstract class BoardGraphics extends Graphics{
 
 
     public static void printOwnBoard(Board board){
+        System.out.println("Mi tablero");
         int counter=0;
         for(int i = 0; i< board.getMatrix().length; i++){
             if(counter==board.getLineLenght()){
@@ -100,5 +102,7 @@ public abstract class BoardGraphics extends Graphics{
             System.out.print(i+1 + " ");
         }
     }
+
+
 }
 

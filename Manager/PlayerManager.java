@@ -1,6 +1,7 @@
 package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
+import TP_Bis.Graphic.BoardGraphics;
 import TP_Bis.Graphic.PlayerGraphics;
 import TP_Bis.entity.Board;
 import TP_Bis.entity.Player;
@@ -36,7 +37,8 @@ public class PlayerManager {
         boolean playerWon = false;
         PlayerGraphics.playerTurn(me);
         printMyBoard(me.getBoard());
-        printEnemyBoard(enemy.getMyBoard());
+        printEnemyBoard(enemy.getBoard());
+
         if (me.isFirstTurn()) {
             setSoldiers(me);
         } else {
@@ -77,24 +79,20 @@ public class PlayerManager {
 
         }
         //printMyBoard(me.getBoard());
-        printEnemyBoard(enemy.getBoard());
+        //printEnemyBoard(enemy.getBoard());
         return playerWon;//mientras devuelva false, siguen jugando
     }
 
 
-    /*private void printMyBoard(Board board) {
-        System.out.println("Mi tablero: ");
-        boardManager.printOwnBoard(board);
-    }*/
+
 
     public void printMyBoard(Board board) {
-        System.out.println("Mi tablero: ");
-        boardManager.printOwnBoard(board);
+        BoardGraphics.printOwnBoard(board);
     }
 
 
     private void printEnemyBoard(Board enemyBoard) {
-        boardManager.showEnemyBoard(enemyBoard);
+        BoardGraphics.showEnemyBoard(enemyBoard);
     }
 
     private void setSoldiers(Player player) {
@@ -164,11 +162,13 @@ public class PlayerManager {
                 playerWon = false;
                 break;
         }
-        printMyBoard(me.getBoard());
+       printMyBoard(me.getBoard());
         printEnemyBoard(enemy.getBoard());
+
         return playerWon;
 
     }
+
 
     public void setBoard(Player player, Board changedBoard) {
         boardManager.setBoard(player, changedBoard);

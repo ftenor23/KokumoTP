@@ -1,18 +1,4 @@
 package TP_Bis.Server_Client;
-import TP_Bis.DataIn.EnterData;
-import TP_Bis.Graphic.ClientGraphics;
-import TP_Bis.Graphic.Graphics;
-
-import TP_Bis.Manager.GameManager;
-import TP_Bis.Manager.PlayerManager;
-import TP_Bis.entity.Data;
-import TP_Bis.entity.Player;
-import TP_Bis.validator.IPValidator;
-import com.google.gson.Gson;
-
-import java.net.*;
-import java.io.*;
-import java.util.Scanner;
 
 /*public class Client {
     //public static void main(String[] args)  throws IOException {

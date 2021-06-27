@@ -67,9 +67,6 @@ public class Player {
         this.firstTurn = firstTurn;
     }
 
-    public Board getMyBoard() {
-        return myBoard;
-    }
 
     public void setMyBoard(Board myBoard) {
         this.myBoard = myBoard;

@@ -1,7 +1,6 @@
 package TP_Bis.entity;
 
 import TP_Bis.DataIn.EnterData;
-import TP_Bis.Graphic.ClientGraphics;
 import TP_Bis.Graphic.Graphics;
 import TP_Bis.Graphic.ConnectionGraphics;
 import TP_Bis.Manager.GameManager;
@@ -146,7 +145,7 @@ public class Game {
             oponentIp = EnterData.nextLine();
             ipIsValid= IPValidator.ipIsValid(oponentIp);
             if(!ipIsValid){
-                ClientGraphics.ipNotValid(oponentIp);
+                ConnectionGraphics.ipNotValid(oponentIp);
             }
         }
         gameManager.startGame(runAsHost,oponentIp);

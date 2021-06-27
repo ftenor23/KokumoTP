@@ -1,7 +1,7 @@
 package TP_Bis.Server_Client_Bis;
 
 
-import TP_Bis.Graphic.Graphics;
+import TP_Bis.Graphic.ConnectionGraphics;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -14,6 +14,11 @@ public class Client {
     private static int CLIENT_PORT=9009;
     private int port;
     private String urlToGo;
+    private boolean connected=false;
+    private boolean connectionLost=false;
+    private boolean showCantConectWithServer=true;
+    private final static String WAITING="waiting";
+
 
     public int getPort() {
         return port;
@@ -33,10 +38,11 @@ public class Client {
     public String receiveMessage(){
         String result="null";
 
+
         try {
             //revisar
             URL url = new URL(urlToGo);
-            System.out.println("URL: " + urlToGo);
+            //System.out.println("URL: " + urlToGo);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("accept", "application/json");
             InputStream responseStream = connection.getInputStream();
@@ -44,10 +50,28 @@ public class Client {
             Scanner s = new Scanner(responseStream).useDelimiter("\\A");
             //recibo JSON
             result = s.hasNext() ? s.next() : "";
+            if(result.equals(WAITING) && !connected){
 
+            }
+
+            if(result.equals(WAITING)){
+                if(!connected){
+                    ConnectionGraphics.conectionAccepted();
+                    connected=true;
+                }else if(connectionLost){
+                    ConnectionGraphics.connectedAgain();
+                    connectionLost=false;
+                }
+            }
 
         }catch (Exception ex){
-            System.out.println("Conexion perdida... espere un momento");
+            if(connected) {
+                ConnectionGraphics.conectionLost();
+                connectionLost = true;
+            }else if(showCantConectWithServer){
+                ConnectionGraphics.cantConnectWithServer();
+                showCantConectWithServer=false;
+            }
             //ex.getMessage();
         }
         return result;

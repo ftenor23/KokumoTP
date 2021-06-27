@@ -72,13 +72,7 @@ public class GameManager {
             }
         }
 
-        data.setHostBoard(host.getBoard());
-        data.setClientBoard(enemy.getBoard());
-        data.setGameOver(true);
-
-        str = gson.toJson(data);
-//ENVIAR MENSAJE AL SERVER
-        server.setMessage(str);
+        sendData(data, host, enemy, true, server);
         ConnectionGraphics.serverClosing();
         try{
             Thread.sleep(10000);
@@ -89,16 +83,14 @@ public class GameManager {
 
     private void execute(Player hostPlayer, Player clientPlayer, Server server, Client client, boolean runAsHost) throws IOException {
         //ejecutamos un ciclo hasta que alguno de los dos jugadores pierda
-        /*ServerManager serverManager = new ServerManager();
-        serverManager.execute(host, enemy,client);*/
+
         boolean firstTurn=true;
         boolean gameOver = false;
-        boolean knowOponentName = false;
         Data data = new Data();
         PlayerManager playerManager = new PlayerManager();
         Gson gson = new Gson();
         String exchangeMessage="";
-        while (!gameOver) {
+        while (true) {
 
             //Definimos que el primer turno es siempre del host, por lo tanto
             //consultamos si el jugador actual es host o no para saber
@@ -108,6 +100,10 @@ public class GameManager {
                 printWaitingTurn(runAsHost,data,clientPlayer);
                 exchangeMessage = waitingOponent(client);
                 data = processData(exchangeMessage,hostPlayer,clientPlayer,gameOver);
+                if(data.connectionLost()){
+                    ConnectionGraphics.closeGameConectionLost();
+                    return;
+                }
             }
             server.setMessage(WAITING);
             gameOver = data.isGameOver();
@@ -141,32 +137,17 @@ public class GameManager {
                 return;
             }
 
-            data.setHostBoard(hostPlayer.getBoard());
-            data.setClientBoard(clientPlayer.getBoard());
-            data.setGameOver(gameOver);
-
-            exchangeMessage = gson.toJson(data);
-//crear clase exchangeManager
-            server.setMessage(exchangeMessage);
-            //sendData(data, hostPlayer,clientPlayer,gameOver,server);
+            //enviamos los datos al servidor para que el otro jugador los capture
+            sendData(data, hostPlayer,clientPlayer,gameOver,server);
 
         }
 
     }
 
     public String waitingOponent(Client client){
-        String response="null";
-        try{
-           // response = client.receiveMessage();
-            while(response.equals(WAITING) || response.equals("null")){//espero a que cambie el estado en server cliente
-                //esperamos 3 segundos para ver si cambio la respuesta en el server
-                Thread.sleep(3000);
-                response = client.receiveMessage();
-            }
-        }catch (Exception e){
-            Graphics.printException(e);
-        }
-        return response;
+
+        return ConnectionManager.waitingOponent(client);
+
     }
 
     private void printWaitingTurn(boolean runAsHost, Data data, Player clientPlayer){
@@ -187,27 +168,13 @@ public class GameManager {
     }
 
 
-    private Data processData(String str, Player hostPlayer, Player clientPlayer,
+    private Data processData(String exchangeMessage, Player hostPlayer, Player clientPlayer,
                              boolean gameOver) {
-        Data data = new Data();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, Data.class);
-        hostPlayer.setMyBoard(data.getHostBoard());
-        clientPlayer.setMyBoard(data.getClientBoard());
-        gameOver = data.isGameOver();
-        return data;
+        return ConnectionManager.processData(exchangeMessage,hostPlayer,clientPlayer,gameOver);
     }
 
-    private void sendData(Data data, Player hostPlayer, Player clientPlayer, boolean gameOver, Server server) {
-        Gson gson=new Gson();
-        String str;
-        data.setHostBoard(hostPlayer.getBoard());
-        data.setClientBoard(clientPlayer.getBoard());
-        data.setGameOver(gameOver);
-
-        str = gson.toJson(data);
-
-        server.setMessage(str);
+    private static void sendData(Data data, Player hostPlayer, Player clientPlayer, boolean gameOver, Server server) {
+        ConnectionManager.sendData(data,hostPlayer,clientPlayer,gameOver,server);
     }
 
 }
