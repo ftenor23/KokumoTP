@@ -35,6 +35,8 @@ public class MoveManager {
         setSoldierCantMove(player,id); //modificar para que cuando pase un turno pueda moverse
     }
 
+    //en base al movimiento seleccionado, verifica si es valido y acomoda al
+    //soldado en la nueva posicion
     private void move(Player player, int position, int soldierId, int move){
         Soldier soldier = getSoldier(player,soldierId);
         int newPosition=-1;
@@ -76,23 +78,22 @@ public class MoveManager {
     }
 
     private Soldier getSoldier(Player player, int soldierId){
-        return player.getBoard().getSoldier(soldierId);
+        return SoldierManager.getSoldier(player,soldierId);
     }
 
     private int getSoldierPosition(Player player, int id){
-        return player.getBoard().getSoldierPosition(id);
+        return SoldierManager.getSoldierPosition(player, id);
     }
 
     private void setSoldierCantMove(Player player, int id){
-        player.getBoard().getSoldier(id).setCanMove(false);
+        SoldierManager.setSoldierCantMove(player,id);
     }
 
     private void emptyGrid(Player player, int position){
-        player.getBoard().getMatrix()[position].emptyGrid();
+        SoldierManager.emptyGrid(player,position);
     }
 
     private void setSoldierPosition(Player player, int newPosition, Soldier soldier){
-        BoardManager boardManager = new BoardManager();
-        boardManager.setSoldierPosition(player.getBoard(), newPosition, soldier, player.isFirstTurn());
+        BoardManager.setSoldierPosition(player.getBoard(), newPosition, soldier, player.isFirstTurn());
     }
 }

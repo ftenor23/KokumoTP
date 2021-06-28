@@ -81,7 +81,7 @@ public class BoardManager {
 
         return PositionValidator.arrayOutOfBounds(position);
     }
-    public void setSoldierPosition(Board board, int position, Soldier soldier, boolean firstTurn) {
+    public static void setSoldierPosition(Board board, int position, Soldier soldier, boolean firstTurn) {
 
         if(board.getMatrix()[position].isOccupied()){
             if(firstTurn) {
@@ -126,10 +126,6 @@ public class BoardManager {
         }
         return true;
     }
-
-
-
-
 
     public void setBoard(Player player, Board board){
         player.setMyBoard(board);

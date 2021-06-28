@@ -3,7 +3,7 @@ package TP_Bis.Graphic;
 
 public abstract class Graphics {
     public static void invalidOption(){
-        System.out.println("OPCION INVALIDA");
+        System.out.println("Opcion invalida");
     }
     public static void printException(Exception e){
         System.out.println("Exception: " + e.getLocalizedMessage());

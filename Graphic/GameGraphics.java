@@ -5,6 +5,23 @@ public abstract class GameGraphics extends Graphics{
         System.out.println("Ingrese el nombre del jugador numero " + id + ": ");
     }
 
+    public static void gameOver(){
+        System.out.println("Juego terminado:");
+    }
+
+    public static void victory(){
+        System.out.println("Ganaste!");
+    }
+
+    public static void lose(String enemyName){
+        System.out.println("Perdiste! Gano " + enemyName + "!!");
+    }
+    public static void backToMainPage(){
+        System.out.println("Volviendo a la pantalla inicial...");
+    }
+    public static void enterName(){
+        System.out.println("Ingrese su nombre: ");
+    }
     public static void playerWon(String playerName){
         System.out.println("Gano " + playerName + "!");
     }

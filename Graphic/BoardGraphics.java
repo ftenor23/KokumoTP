@@ -78,23 +78,23 @@ public abstract class BoardGraphics extends Graphics{
         System.out.println("Perdiste tu turno, el terreno esta inhabilitado");
     }
 
-    public static void printDeadSoldier(){
+    private static void printDeadSoldier(){
         System.out.print("X  ");
     }
 
-    public static void printImpassableZone(){
+    private static void printImpassableZone(){
         System.out.print("*  ");
     }
 
-    public static void printCommander(){
+    private static void printCommander(){
         System.out.print("C  ");
     }
 
-    public static void printSoldier(){
+    private static void printSoldier(){
         System.out.print("S  ");
     }
 
-    public static void printPosition(int i){
+    private static void printPosition(int i){
         if (i < 9) {
             System.out.print(i + 1 + "  ");
         } else {

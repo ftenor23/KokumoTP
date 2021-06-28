@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 
 public abstract class ConnectionManager {
     private final static String WAITING=GameManager.getWAITING();
-
+    private int counter=0;
     public static void sendData(DataExchange dataExchange, Player hostPlayer, Player clientPlayer, boolean gameOver, Server server) {
 
         Gson gson=new Gson();
@@ -24,6 +24,7 @@ public abstract class ConnectionManager {
         server.setMessage(exchangeMessage);
     }
 
+
     public static String waitingOponent(Client client){
         String response="null";
         int counter=0;
@@ -36,9 +37,9 @@ public abstract class ConnectionManager {
                 if(response.equals("null")){
                     counter++;
                 }
-                //si preguntamos 50 veces por la respuesta y no podemos conectarnos
+                //si preguntamos 20 veces por la respuesta y no podemos conectarnos
                 //al server, asumimos que se perdio la conexion y cerramos el juego
-                if(counter==50){
+                if(counter==20){
                     return response;
                 }
             }

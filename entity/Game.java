@@ -13,8 +13,6 @@ import TP_Bis.validator.IPValidator;
 import java.net.BindException;
 
 public class Game {
-    private Player playerOne;
-    private Player playerTwo;
     private PlayerManager playerManager;
     private boolean showTitle;
     private final static int CREATE_GAME = 1;
@@ -28,17 +26,17 @@ public class Game {
         playerManager=new PlayerManager();
     }
 
-    private boolean gameOver() {
+    private boolean gameOver(Player playerOne, Player playerTwo) {
        // while(!playerOne.turn(playerTwo) && !playerTwo.turn(playerOne));
         while(!playerManager.turn(playerOne, playerTwo) && !playerManager.turn(playerTwo,playerOne));
         return true;
     }
 
-    private boolean playerOneLost(){
+    private boolean playerOneLost(Player playerOne){
         return playerManager.mySoldiersAreDead(playerOne);
     }
 
-    private boolean playerTwoLost(){
+    private boolean playerTwoLost(Player playerTwo){
         return playerManager.mySoldiersAreDead(playerTwo);
     }
 
@@ -57,9 +55,9 @@ public class Game {
         }
         if(action!=EXIT_GAME){
             if(action== CREATE_GAME){
-                play(true);
+                playOnline(true);
             }if (action== JOIN_GAME){
-                play(false);
+                playOnline(false);
             }if(action==SINGLE_PLAY){
                 singlePlay();
             }
@@ -98,16 +96,16 @@ public class Game {
         String namePlayerOne= EnterData.nextLine();
         GameGraphics.enterPlayerName(pTwo);
         String namePlayerTwo=EnterData.nextLine();
-        playerOne=new Player(namePlayerOne);
-        playerTwo=new Player(namePlayerTwo);
+        Player playerOne=new Player(namePlayerOne);
+        Player playerTwo=new Player(namePlayerTwo);
 
-        while(!gameOver());
+        while(!gameOver(playerOne, playerTwo));
 
-        if(playerOneLost()){
+        if(playerOneLost(playerOne)){
             GameGraphics.playerWon(playerTwo.getPlayerName());
 
         }
-        if(playerTwoLost()){
+        if(playerTwoLost(playerTwo)){
             GameGraphics.playerWon(playerOne.getPlayerName());
 
         }
@@ -121,7 +119,7 @@ public class Game {
     }
 
 
-    public void play(boolean runAsHost){
+    public void playOnline(boolean runAsHost){
         GameManager gameManager = new GameManager();
         boolean ipIsValid=false;
         String oponentIp="";

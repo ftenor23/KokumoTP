@@ -4,27 +4,8 @@ package TP_Bis.Graphic;
 public abstract class ConnectionGraphics extends Graphics{
 
 
-    public static void gameOver(){
-        System.out.println("Juego terminado:");
-    }
-
-    public static void victory(){
-        System.out.println("Ganaste!");
-    }
-
-    public static void lose(String enemyName){
-        System.out.println("Perdiste! Gano " + enemyName + "!!");
-    }
-
     public static void serverClosing(){
         System.out.println("El servidor se cerrara en 10 segundos...");
-    }
-
-    public static void backToMainPage(){
-        System.out.println("Volviendo a la pantalla inicial...");
-    }
-    public static void enterName(){
-        System.out.println("Ingrese su nombre: ");
     }
 
     public static void waitingEnemyTurn(String enemyName){

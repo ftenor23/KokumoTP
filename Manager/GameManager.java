@@ -1,6 +1,7 @@
 package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
+import TP_Bis.Graphic.GameGraphics;
 import TP_Bis.Graphic.Graphics;
 import TP_Bis.Graphic.ConnectionGraphics;
 import TP_Bis.Server_Client.Client;
@@ -26,7 +27,7 @@ public class GameManager {
         client = new Client(oponentIp, runAsHost);
         Player hostPlayer;
         Player clientPlayer;
-       ConnectionGraphics.enterName();
+       GameGraphics.enterName();
        String name= EnterData.nextLine();
        if(runAsHost){
           hostPlayer = new Player(name);
@@ -62,10 +63,19 @@ public class GameManager {
             //del oponente
             if(!runAsHost || !hostPlayer.isFirstTurn()){
                 printWaitingTurn(runAsHost, dataExchange,clientPlayer);
+
                 exchangeMessage = waitingOponent(client);
+
+
                 dataExchange = processData(exchangeMessage,hostPlayer,clientPlayer);
                 if(dataExchange.connectionLost()){
                     ConnectionGraphics.closeGameConectionLost();
+                    GameGraphics.backToMainPage();
+                    try{
+                        Thread.sleep(5000);
+                    }catch(Exception e){
+
+                    }
                     return;
                 }
             }
@@ -109,32 +119,32 @@ public class GameManager {
 
     }
 
-    public static boolean hostWon(Player client){
+    private static boolean hostWon(Player client){
         PlayerManager playerManager = new PlayerManager();
         return playerManager.enemiesAreDead(client);
     }
 
     private static void gameOver(Player host, Player enemy, DataExchange dataExchange,Server server, boolean runAsHost){
         //imprimimos mensaje y enviamos datos a cliente para finalizar la partida
-        ConnectionGraphics.gameOver();
+        GameGraphics.gameOver();
 
         if(runAsHost){
             if(hostWon(enemy)){
-                ConnectionGraphics.victory();
+                GameGraphics.victory();
             }else{
-                ConnectionGraphics.lose(dataExchange.getClientName());
+                GameGraphics.lose(dataExchange.getClientName());
             }
         }else{
             if(!hostWon(enemy)){
-                ConnectionGraphics.victory();
+                GameGraphics.victory();
             }else{
-                ConnectionGraphics.lose(dataExchange.getHostName());
+                GameGraphics.lose(dataExchange.getHostName());
             }
         }
 
         sendData(dataExchange, host, enemy, true, server);
         ConnectionGraphics.serverClosing();
-        ConnectionGraphics.backToMainPage();
+        GameGraphics.backToMainPage();
         try{
             Thread.sleep(10000);
         }catch(Exception e){

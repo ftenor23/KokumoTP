@@ -5,6 +5,7 @@ import TP_Bis.Graphic.SoldierGraphics;
 
 import TP_Bis.entity.Player;
 
+import TP_Bis.entity.Soldier;
 import TP_Bis.validator.SoldierValidator;
 
 
@@ -52,4 +53,19 @@ public class SoldierManager {
         player.setFirstTurn(false);
     }
 
+    public static void setSoldierCantMove(Player player, int id){
+        player.getBoard().getSoldier(id).setCanMove(false);
+    }
+
+   public static Soldier getSoldier(Player player, int soldierId){
+        return player.getBoard().getSoldier(soldierId);
+    }
+
+    public static int getSoldierPosition(Player player, int id){
+        return player.getBoard().getSoldierPosition(id);
+    }
+
+    public static void emptyGrid(Player player, int position){
+        player.getBoard().getMatrix()[position].emptyGrid();
+    }
 }
