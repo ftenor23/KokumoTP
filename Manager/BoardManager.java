@@ -21,39 +21,27 @@ public class BoardManager {
         for(int i=0; i<board.getNumberOfSoldiers();i++){
             id=i+1;
             if(i==0) {
-                while(board.getMatrix()[positionOne].isOccupied() || arrayOutOfBounds(positionOne)){
+                while(board.getMatrix()[positionOne].isOccupied()){
                     if(board.getMatrix()[positionOne].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
                         positionOne = EnterData.nextInt() - 1;
-                    }
-                    if(arrayOutOfBounds(positionOne)){
-                        BoardGraphics.positionOutOfBounds(id);
-                        positionOne= EnterData.nextInt() - 1;
                     }
                 }
                 board.getSoldiers()[i]=new Soldier(true, id, positionOne);
             }
             if(i==1){
-                while(board.getMatrix()[positionTwo].isOccupied() || arrayOutOfBounds(positionTwo)){
+                while(board.getMatrix()[positionTwo].isOccupied()){
                     if(board.getMatrix()[positionTwo].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
-                        positionTwo = EnterData.nextInt() - 1;
-                    }
-                    if(arrayOutOfBounds(positionTwo)){
-                        BoardGraphics.positionOutOfBounds(id);
                         positionTwo = EnterData.nextInt() - 1;
                     }
                 }
                 board.getSoldiers()[i]=new Soldier(false, id, positionTwo);
             }
             if(i==2){
-                while(board.getMatrix()[positionThree].isOccupied() || arrayOutOfBounds(positionThree)){
+                while(board.getMatrix()[positionThree].isOccupied() ){
                     if(board.getMatrix()[positionThree].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
-                        positionThree = EnterData.nextInt() - 1;
-                    }
-                    if(arrayOutOfBounds(positionThree)){
-                        BoardGraphics.positionOutOfBounds(id);
                         positionThree = EnterData.nextInt() - 1;
                     }
                 }
