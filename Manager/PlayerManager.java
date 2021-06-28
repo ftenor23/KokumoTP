@@ -33,6 +33,8 @@ public class PlayerManager {
         actionValidator = new ActionValidator();
     }
 
+    //en este metodo se ejecuta toda la logica del juego. Devuelve un booleano
+    //indicando si el jugador actual gano o no la partida
     public boolean turn(Player me, Player enemy) {
         boolean playerWon = false;
         if(!me.isFirstTurn()){
@@ -44,6 +46,8 @@ public class PlayerManager {
 
         if (me.isFirstTurn()) {
             setSoldiers(me);
+            printMyBoard(me.getBoard());
+            printEnemyBoard(enemy.getBoard());
         } else {
             this.commanderIsDead = commanderIsDead(me);
 
@@ -58,6 +62,8 @@ public class PlayerManager {
 
                     PlayerGraphics.attack();
 
+                    //si solo puede atacar o el comandante esta muerto,
+                    //no se le imprime el menu de mover al soldado
                     if (!onlyAttack(me, id) && !commanderIsDead) {
                         PlayerGraphics.moveSoldier();
                     }
@@ -67,6 +73,8 @@ public class PlayerManager {
                         action = INVALID_OPTION;
                         PlayerGraphics.invalidOption();
                     }
+                    //si a pesar de los avisos, se ingresa la opcion de moverse cuando
+                    //no es posible, le damos un aviso al jugador y vuelve a ejecutarse el ciclo
                     if ((commanderIsDead || !soldierCanMove(me, id)) && action == MOVE_SOLDIER) {
                         action = INVALID_OPTION;
                         PlayerGraphics.invalidOption();
@@ -143,6 +151,7 @@ public class PlayerManager {
     }
 
 
+    //ejecuta lo seleccionado por el jugador en turn()
     private boolean executeAction(Player me, Player enemy, int id, int action) {
         boolean playerWon = true;
         switch (action) {

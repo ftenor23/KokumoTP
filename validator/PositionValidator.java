@@ -14,9 +14,11 @@ public class PositionValidator {
         return false;
     }
 
+    //si el valor ingresado es menor a 1 o mayor al tamaño de la matriz
+    //se le informa al jugador para que vuelva a ingresar los datos
     public static boolean arrayOutOfBounds(int position) {
 
-        return position<0 || position>BOARD_LENGHT;
+        return position<1 || position>BOARD_LENGHT;
     }
 
 }

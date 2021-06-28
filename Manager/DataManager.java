@@ -7,11 +7,12 @@ import com.google.gson.Gson;
 public abstract class DataManager {
     private final static String WAITING=GameManager.getWAITING();
 
+    //procesamos los datos recibidos del enemigo
     public static DataExchange processData(String exchangeMessage, Player hostPlayer, Player clientPlayer) {
         DataExchange dataExchange = new DataExchange();
         Gson gson = new Gson();
         if(exchangeMessage.equals("null") || exchangeMessage.equals(WAITING)){
-            //si el mensaje devuelto por el servidor ajeno es null o "waiting"
+            //si el mensaje devuelto por el servidor ajeno es null
             //significa que se cayo la conexion del otro jugador
             //por lo tanto lo informamos a traves de DataExchange
             dataExchange.setConnectionLost(true);

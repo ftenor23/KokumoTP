@@ -48,8 +48,6 @@ public class GameManager {
     //esta funcion ejecuta un ciclo hasta que alguno de los dos jugadores pierda o
     //se pierda la conexion de alguno de ellos
     private void execute(Player hostPlayer, Player clientPlayer, Server server, Client client, boolean runAsHost){
-        //ejecutamos un ciclo hasta que alguno de los dos jugadores pierda
-
 
         boolean gameOver = false;
         DataExchange dataExchange = new DataExchange();
@@ -64,8 +62,8 @@ public class GameManager {
             if(!runAsHost || !hostPlayer.isFirstTurn()){
                 printWaitingTurn(runAsHost, dataExchange,clientPlayer);
 
+                //recibe un json del oponente
                 exchangeMessage = waitingOponent(client);
-
 
                 dataExchange = processData(exchangeMessage,hostPlayer,clientPlayer);
                 if(dataExchange.connectionLost()){
@@ -83,6 +81,7 @@ public class GameManager {
             //esta realizando sus movimientos y el otro este a la a espera
             server.setMessage(WAITING);
             gameOver = dataExchange.isGameOver();
+
             //consultamos si el enemigo nos gano en su jugada
             if (gameOver){
                 gameOver(hostPlayer,clientPlayer, dataExchange,server, runAsHost);
@@ -107,6 +106,9 @@ public class GameManager {
             }
 
             //consultamos si el juego termino por eliminar a los jugadores enemigos
+            //si el juego termina, entramos al metodo gameOver y desde ahi informamos
+            //al servidor el estado del juego. Al terminar de ejecutar gameOver, salimos
+            //del while
             if(gameOver){
                 gameOver(hostPlayer,clientPlayer, dataExchange,server, runAsHost);
                 return;

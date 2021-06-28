@@ -13,8 +13,8 @@ public class Server {
     private final static int CLIENT_PORT=9009;
     private final int port;
     private final ContextHandler contextHandler;
-    //InetSocketAddress address; //direccion (mi ip)
 
+    //en base a si corre como host, seleccionamos distintos puertos
     public Server(boolean runAsHost){
         if(runAsHost){
             this.port= HOST_PORT;
@@ -41,7 +41,7 @@ public class Server {
         contextHandler.setResponse(message);
     }
 
-
+    //cierra el servidor al instante que es llamado
     public static void stop(){
         server.stop(0);
     }

@@ -76,11 +76,13 @@ public class BoardManager {
 
         }
     }
-//enviar a validator
+
     private boolean arrayOutOfBounds(int position){
 
         return PositionValidator.arrayOutOfBounds(position);
     }
+
+    //seteamos la posicion del soldado
     public static void setSoldierPosition(Board board, int position, Soldier soldier, boolean firstTurn) {
 
         if(board.getMatrix()[position].isOccupied()){
@@ -97,7 +99,8 @@ public class BoardManager {
         }
     }
 
-
+    //recibimos un ataque y realiza las modificaciones correspondientes
+    //en mi tablero
     public void attackReceived(Board myBoard,int position) {
         int id = -1;
         for (int i = 0; i < myBoard.getSoldiers().length; i++) {
@@ -118,6 +121,8 @@ public class BoardManager {
         return board.getMatrix().length;
     }
 
+    //booleano que informa si todos los soldados enemigos estan muertos para
+    //dar por terminado el juego
     protected boolean allSoldiersAreDead(Board board){
         for(int i=0; i<board.getSoldiers().length; i++){
             if(!board.getSoldiers()[i].isDead()){

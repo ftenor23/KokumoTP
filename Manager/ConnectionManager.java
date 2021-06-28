@@ -24,12 +24,12 @@ public abstract class ConnectionManager {
         server.setMessage(exchangeMessage);
     }
 
-
+    //esperamos que el mensaje del oponente cambie de waiting a un json
     public static String waitingOponent(Client client){
         String response="null";
         int counter=0;
         try{
-            // response = client.receiveMessage();
+
             while(response.equals(WAITING) || response.equals("null")){//espero a que cambie el estado en server cliente
                 //esperamos 0.5 segundos para ver si cambio la respuesta en el server
                 Thread.sleep(500);

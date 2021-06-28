@@ -13,14 +13,11 @@ public class MoveManager {
         return moveValidator;
     }
 
+    //seleccionamos el movimiento a realizar y lo validamos. Si es valido, ejecuta move()
     public void moveSoldier(Player player, int id){
         MoveValidator moveValidator = new MoveValidator();
         int position = getSoldierPosition(player,id);
 
-       /* if(!moveValidator.isValid(position)){
-            MoveGraphics.invalidPosition();//cargar error
-            return;
-        }*/
         //creamos un ciclo hasta que se cumpla la condicion
         int move=-1; //iniciamos en -1
         while(!moveValidator.moveIsValid(move, position)){ //verificar funcion
@@ -32,7 +29,8 @@ public class MoveManager {
             }
         }
         move(player,position, id,move);
-        setSoldierCantMove(player,id); //modificar para que cuando pase un turno pueda moverse
+        //seteamos que el soldado no pueda moverse en la partida siguiente
+        setSoldierCantMove(player,id);
     }
 
     //en base al movimiento seleccionado, verifica si es valido y acomoda al

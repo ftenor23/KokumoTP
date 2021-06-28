@@ -15,6 +15,8 @@ public class SoldierManager {
     private final BoardManager boardManager = new BoardManager();
     private final SoldierValidator soldierValidator = new SoldierValidator();
 
+    //acomoda a los soldados. (lo ideal seria tener un vector de posiciones
+    //para poder hacer al juego mas modificable y no repetir tanto codigo)
     public void setSoldiers(Player player){
 
         SoldierGraphics.positionSoldiers();

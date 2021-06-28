@@ -14,6 +14,7 @@ public class MoveValidator {
         return newPosition>-1 && newPosition<BOARD_LENGHT;
     }
 
+    //verifica si el movimiento a realizar es valido
     public boolean moveIsValid(int move, int position){
         final int LEFT=3;
         final int RIGHT=4;
@@ -28,7 +29,7 @@ public class MoveValidator {
         }
         if((position+1 == 1 || position+1 == 2 || position+1 == 3
         || position+1 == 4 || position+1 == 5) && move == UP){
-            return false; //si esta arriba, no puede moverse mas arriba
+            return false; //si esta en la fila de arriba, no puede moverse mas arriba
         }
         if((position+1 == BOARD_LENGHT || position+1 == BOARD_LENGHT-1 || position+1 == BOARD_LENGHT-2
                 || position+1 == BOARD_LENGHT-3 || position+1 == BOARD_LENGHT-4) && move == DOWN){
