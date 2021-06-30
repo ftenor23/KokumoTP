@@ -58,12 +58,13 @@ public abstract class BoardGraphics extends Graphics{
     }
 
     public static void positionOccupied(int id){
-        System.out.println("La posicion en la que quiere ubicar al ninja "+ id + " esta ocupada. Ingrese otra posicion:");
+        System.out.println("La posicion en la que quiere ubicar al soldado "+ (id-1) + " esta ocupada. Ingrese otra posicion:");
 
     }
 
     public static void positionOutOfBounds(int id){
-        System.out.println("La posicion en la que quiere ubicar al ninja " + id + " esta fuera de los limites. Ingrese otra posicion:");
+
+        System.out.println("La posicion en la que quiere ubicar al soldado " + (id-1) + " esta fuera de los limites. Ingrese otra posicion:");
     }
 
     public static void occupiedPosition(){
