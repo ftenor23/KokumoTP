@@ -21,28 +21,45 @@ public class BoardManager {
         for(int i=0; i<board.getNumberOfSoldiers();i++){
             id=i+1;
             if(i==0) {
-                while(board.getMatrix()[positionOne].isOccupied()){
+                while(board.getMatrix()[positionOne].isOccupied() || arrayOutOfBounds(positionOne)){
                     if(board.getMatrix()[positionOne].isOccupied()) {
+                        //si la posicion esta ocupada por otro soldado pedimos que ingrese una nueva
                         BoardGraphics.positionOccupied(id);
-                        positionOne = EnterData.nextInt() - 1;
+                        positionOne = EnterData.nextInt()-1;
+                    }
+                    while(arrayOutOfBounds(positionOne)){
+                        //si la nueva posicion esta fuera de los limites, pedimos
+                        //al usuario qe ingrese una nueva hasta que cumpla con ese requisito
+                        BoardGraphics.positionOutOfBounds(id);
+                        positionOne = EnterData.nextInt()-1;
                     }
                 }
+
                 board.getSoldiers()[i]=new Soldier(true, id, positionOne);
             }
             if(i==1){
-                while(board.getMatrix()[positionTwo].isOccupied()){
+                while(board.getMatrix()[positionTwo].isOccupied() || arrayOutOfBounds(positionTwo)){
                     if(board.getMatrix()[positionTwo].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
-                        positionTwo = EnterData.nextInt() - 1;
+                        positionTwo = EnterData.nextInt()-1;
+                    }
+                    while(arrayOutOfBounds(positionTwo)){
+                        BoardGraphics.positionOutOfBounds(id);
+                        positionTwo = EnterData.nextInt()-1;
                     }
                 }
+
                 board.getSoldiers()[i]=new Soldier(false, id, positionTwo);
             }
             if(i==2){
-                while(board.getMatrix()[positionThree].isOccupied() ){
+                while(board.getMatrix()[positionThree].isOccupied() || arrayOutOfBounds(positionThree)){
                     if(board.getMatrix()[positionThree].isOccupied()) {
                         BoardGraphics.positionOccupied(id);
-                        positionThree = EnterData.nextInt() - 1;
+                        positionThree = EnterData.nextInt()-1;
+                    }
+                    while(arrayOutOfBounds(positionThree)){
+                        BoardGraphics.positionOutOfBounds(id);
+                        positionThree = EnterData.nextInt()-1;
                     }
                 }
                 board.getSoldiers()[i]=new Soldier(false, id, positionThree);
@@ -66,8 +83,9 @@ public class BoardManager {
     }
 
     private boolean arrayOutOfBounds(int position){
+        int positionToSend=position+1;
 
-        return PositionValidator.arrayOutOfBounds(position);
+        return PositionValidator.arrayOutOfBounds(positionToSend);
     }
 
     //seteamos la posicion del soldado
