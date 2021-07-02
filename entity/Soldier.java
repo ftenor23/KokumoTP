@@ -22,12 +22,9 @@ public class Soldier {
         this.id=id;
         this.position=position;
     }
-    public void substractALife(){
 
-        this.remainingLives--;
-        if(this.remainingLives<1){
-            this.isDead=true;
-        }
+    public void setRemainingLives(int remainingLives) {
+        this.remainingLives = remainingLives;
     }
 
     public boolean isDead() {

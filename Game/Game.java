@@ -1,14 +1,11 @@
-package TP_Bis.entity;
+package TP_Bis.Game;
 
 import TP_Bis.DataIn.EnterData;
 import TP_Bis.Graphic.GameGraphics;
 import TP_Bis.Graphic.Graphics;
-import TP_Bis.Graphic.ConnectionGraphics;
 import TP_Bis.Manager.GameManager;
 import TP_Bis.Manager.PlayerManager;
 
-
-import TP_Bis.validator.IPValidator;
 
 import java.net.BindException;
 
@@ -24,20 +21,6 @@ public class Game {
     public Game() {
         this.showTitle=true;
         playerManager=new PlayerManager();
-    }
-
-    private boolean gameOver(Player playerOne, Player playerTwo) {
-       // while(!playerOne.turn(playerTwo) && !playerTwo.turn(playerOne));
-        while(!playerManager.turn(playerOne, playerTwo) && !playerManager.turn(playerTwo,playerOne));
-        return true;
-    }
-
-    private boolean playerOneLost(Player playerOne){
-        return playerManager.mySoldiersAreDead(playerOne);
-    }
-
-    private boolean playerTwoLost(Player playerTwo){
-        return playerManager.mySoldiersAreDead(playerTwo);
     }
 
     private void printInstructions(){
@@ -90,49 +73,14 @@ public class Game {
         GameGraphics.printOptions();
     }
     private void singlePlay(){
-        final int pOne=1;
-        final int pTwo=2;
-        GameGraphics.enterPlayerName(pOne);
-        String namePlayerOne= EnterData.nextLine();
-        GameGraphics.enterPlayerName(pTwo);
-        String namePlayerTwo=EnterData.nextLine();
-        Player playerOne=new Player(namePlayerOne);
-        Player playerTwo=new Player(namePlayerTwo);
-
-        while(!gameOver(playerOne, playerTwo));
-
-        if(playerOneLost(playerOne)){
-            GameGraphics.playerWon(playerTwo.getPlayerName());
-
-        }
-        if(playerTwoLost(playerTwo)){
-            GameGraphics.playerWon(playerOne.getPlayerName());
-
-        }
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return;
+        GameManager gameManager=new GameManager();
+        gameManager.singlePlay();
     }
 
 
     public void playOnline(boolean runAsHost){
         GameManager gameManager = new GameManager();
-        boolean ipIsValid=false;
-        String oponentIp="";
-        while(!ipIsValid) {
-            //pedimos la ip del oponente
-            ConnectionGraphics.enterEnemyIp(runAsHost);
-            oponentIp = EnterData.nextLine();
-            //verificamos si la ip es valida
-            ipIsValid= IPValidator.ipIsValid(oponentIp);
-            if(!ipIsValid){
-                ConnectionGraphics.ipNotValid(oponentIp);
-            }
-        }
+        String oponentIp=gameManager.enterIp(runAsHost);
         try {
             gameManager.startGame(runAsHost, oponentIp);
         }catch (BindException e){
@@ -142,7 +90,6 @@ public class Game {
         }
     }
     public static void main(String args[]) {
-
 
         Game game = new Game();
         game.execute();

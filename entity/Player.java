@@ -8,8 +8,7 @@ public class Player {
     private boolean commanderIsDead;
     private boolean informCommanderIsDead;
     private boolean informCommanderWasAttacked;
-    private boolean informSoldierOneIsDead;
-    private boolean informSoldierTwoIsDead;
+    private boolean[] informSoldierIsDead;
 
     public Player(String name) {
         this.playerName = name;
@@ -18,8 +17,7 @@ public class Player {
         this.commanderIsDead=false;
         this.informCommanderIsDead=true;
         this.informCommanderWasAttacked=true;
-        this.informSoldierOneIsDead=true;
-        this.informSoldierTwoIsDead=true;
+        this.informSoldierIsDead=inicializeArrayAsTrue();
     }
 
     public boolean informCommanderWasAttacked() {
@@ -28,22 +26,6 @@ public class Player {
 
     public void setInformCommanderWasAttacked(boolean informCommanderWasAttacked) {
         this.informCommanderWasAttacked = informCommanderWasAttacked;
-    }
-
-    public boolean informSoldierOneIsDead() {
-        return informSoldierOneIsDead;
-    }
-
-    public void setInformSoldierOneIsDead(boolean informSoldierOneIsDead) {
-        this.informSoldierOneIsDead = informSoldierOneIsDead;
-    }
-
-    public boolean informSoldierTwoIsDead() {
-        return informSoldierTwoIsDead;
-    }
-
-    public void setInformSoldierTwoIsDead(boolean informSoldierTwoIsDead) {
-        this.informSoldierTwoIsDead = informSoldierTwoIsDead;
     }
 
     public boolean informCommanderIsDead() {
@@ -79,4 +61,26 @@ public class Player {
         return playerName;
     }
 
+    public boolean getInformSoldierIsDead(int id) {
+        return informSoldierIsDead[id];
+    }
+
+    public boolean[] getInformSoldierIsDead() {
+        return informSoldierIsDead;
+    }
+
+    public void setInformSoldierIsDead(boolean informSoldierIsDead, int id) {
+        this.informSoldierIsDead[id] = informSoldierIsDead;
+    }
+
+    private boolean[] inicializeArrayAsTrue(){
+        final int CANT_OF_COMMANDERS=1;
+        //LE RESTAMOS UNO AL ARRAY PORQUE EL MENSAJE PARA INFORMAR
+        //QUE EL COMANDANTE ESTA MUERTO SE REALIZA POR OTRO MEDIO
+        boolean[] array=new boolean[Board.getNumberOfSoldiers()-CANT_OF_COMMANDERS];
+        for(int i=0;i<array.length;i++){
+            array[i]=true;
+        }
+        return array;
+    }
 }

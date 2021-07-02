@@ -1,6 +1,7 @@
 package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
+
 import TP_Bis.Graphic.BoardGraphics;
 import TP_Bis.Graphic.GameGraphics;
 import TP_Bis.Graphic.PlayerGraphics;
@@ -11,7 +12,7 @@ import TP_Bis.validator.ActionValidator;
 
 
 
-public class PlayerManager {
+public class PlayerManager{
     private boolean commanderIsDead;
     private final BoardManager boardManager;
     private final AttackManager attackManager;
@@ -54,37 +55,12 @@ public class PlayerManager {
             informSoldiersAttacked(me);
 
             for (int i = 0; i < soldiersAlive(me); i++) {
-                int action = INVALID_OPTION; //inicializamos con un valor invalido para que se cumpla el ciclo
                 int id = i + 1; //el id del soldado es i+1
-                while (action != ATTACK && action != MOVE_SOLDIER && !soldierIsDead(me, id)) {
-
-                    PlayerGraphics.selectMoveMenu(me, id);
-
-                    PlayerGraphics.attack();
-
-                    //si solo puede atacar o el comandante esta muerto,
-                    //no se le imprime el menu de mover al soldado
-                    if (!onlyAttack(me, id) && !commanderIsDead) {
-                        PlayerGraphics.moveSoldier();
-                    }
-
-                    action = EnterData.nextInt();
-                    if (action != ATTACK && action != MOVE_SOLDIER) {
-                        action = INVALID_OPTION;
-                        PlayerGraphics.invalidOption();
-                    }
-                    //si a pesar de los avisos, se ingresa la opcion de moverse cuando
-                    //no es posible, le damos un aviso al jugador y vuelve a ejecutarse el ciclo
-                    if ((commanderIsDead || !soldierCanMove(me, id)) && action == MOVE_SOLDIER) {
-                        action = INVALID_OPTION;
-                        PlayerGraphics.invalidOption();
-                    }
-
-                }
+                int action = selectOption(INVALID_OPTION,me,id);
+                //inicializamos con un valor invalido para que se cumpla el ciclo
                 //ejecutamos la jugada y nos devuelve un booleano indicando si el
                 //jugador actual mato a todos los enemigos
                 playerWon = executeAction(me, enemy, id, action);
-
                 if(playerWon){
                     return playerWon;
                 }
@@ -95,6 +71,34 @@ public class PlayerManager {
         return playerWon;//mientras devuelva false, siguen jugando
     }
 
+    private int selectOption(int action, Player me, int id){
+        while (action != ATTACK && action != MOVE_SOLDIER && !soldierIsDead(me, id)) {
+
+            PlayerGraphics.selectMoveMenu(me, id);
+
+            PlayerGraphics.attack();
+
+            //si solo puede atacar o el comandante esta muerto,
+            //no se le imprime el menu de mover al soldado
+            if (!onlyAttack(me, id) && !commanderIsDead) {
+                PlayerGraphics.moveSoldier();
+            }
+
+            action = EnterData.nextInt();
+            if (action != ATTACK && action != MOVE_SOLDIER) {
+                action = INVALID_OPTION;
+                PlayerGraphics.invalidOption();
+            }
+            //si a pesar de los avisos, se ingresa la opcion de moverse cuando
+            //no es posible, le damos un aviso al jugador y vuelve a ejecutarse el ciclo
+            if ((commanderIsDead || !soldierCanMove(me, id)) && action == MOVE_SOLDIER) {
+                action = INVALID_OPTION;
+                PlayerGraphics.invalidOption();
+            }
+
+        }
+        return action;
+    }
     public void printMyBoard(Board board) {
         BoardGraphics.printOwnBoard(board);
     }
@@ -182,27 +186,32 @@ public class PlayerManager {
     private void informSoldiersAttacked(Player player) {
         //al inicio de la partida, indicamos si alguno/s soldados
         //recibieron algun ataque
-        if (commanderWasAttacked(player) && player.informCommanderWasAttacked()) {
-            PlayerGraphics.soldierWasAttacked(1);
-            player.setInformCommanderWasAttacked(false);
-        }
-        if (soldierIsDead(player, 2) && player.informSoldierOneIsDead()) {
-            PlayerGraphics.soldierWasAttacked(2);
-            player.setInformSoldierOneIsDead(false);
-        }
-        if(soldierIsDead(player,3) && player.informSoldierTwoIsDead()){
-            PlayerGraphics.soldierWasAttacked(3);
-            player.setInformSoldierTwoIsDead(false);
-        }
-        if (commanderIsDead(player) && player.informCommanderIsDead()) {
-            PlayerGraphics.informCommanderIsDead();
-            player.setInformCommanderIsDead(false);
-        }
+
+        showCommanderAttackedInfo(player);
+        showSoldiersAttackedInfo(player);
+
     }
 
     private boolean commanderWasAttacked(Player player) {
         return player.getBoard().getSoldier(1).getRemainingLives() == 1;
     }
 
+
+    private void showSoldiersAttackedInfo(Player player){
+        for(int i=0;i<player.getInformSoldierIsDead().length;i++) {
+            int id=i+2;//El id de los soldados registrados es i+2
+            if (soldierIsDead(player, id) && player.getInformSoldierIsDead(i)){
+                PlayerGraphics.soldierWasAttacked(id);
+                player.setInformSoldierIsDead(false, i);
+            }
+        }
+    }
+
+    private void showCommanderAttackedInfo(Player player){
+        if (commanderWasAttacked(player) && player.informCommanderWasAttacked()) {
+            PlayerGraphics.soldierWasAttacked(1);
+            player.setInformCommanderWasAttacked(false);
+        }
+    }
 
 }

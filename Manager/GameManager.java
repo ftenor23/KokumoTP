@@ -1,6 +1,7 @@
 package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
+
 import TP_Bis.Graphic.GameGraphics;
 import TP_Bis.Graphic.Graphics;
 import TP_Bis.Graphic.ConnectionGraphics;
@@ -8,6 +9,8 @@ import TP_Bis.Server_Client.Client;
 import TP_Bis.Server_Client.Server;
 import TP_Bis.Exchange.DataExchange;
 import TP_Bis.entity.Player;
+import TP_Bis.validator.IPValidator;
+
 import java.net.BindException;
 
 public class GameManager {
@@ -27,21 +30,21 @@ public class GameManager {
         client = new Client(oponentIp, runAsHost);
         Player hostPlayer;
         Player clientPlayer;
-       GameGraphics.enterName();
-       String name= EnterData.nextLine();
-       if(runAsHost){
+        GameGraphics.enterName();
+        String name= EnterData.nextLine();
+        if(runAsHost){
           hostPlayer = new Player(name);
           clientPlayer = new Player("enemigo");
-       }else {
+        }else {
            hostPlayer = new Player("enemigo");
            clientPlayer = new Player(name);
-       }
+        }
 
-       try{
+        try{
            execute(hostPlayer,clientPlayer,server,client,runAsHost);
-       }catch(Exception e){
+        }catch(Exception e){
            Graphics.printException(e);
-       }
+        }
         server.stop();
     }
 
@@ -60,22 +63,7 @@ public class GameManager {
             //tambien se ejecuta el siguiente codigo que es para recibir los datos
             //del oponente
             if(!runAsHost || !hostPlayer.isFirstTurn()){
-                printWaitingTurn(runAsHost, dataExchange,clientPlayer);
-
-                //recibe un json del oponente
-                exchangeMessage = waitingOponent(client);
-
-                dataExchange = processData(exchangeMessage,hostPlayer,clientPlayer);
-                if(dataExchange.connectionLost()){
-                    ConnectionGraphics.closeGameConectionLost();
-                    GameGraphics.backToMainPage();
-                    try{
-                        Thread.sleep(5000);
-                    }catch(Exception e){
-
-                    }
-                    return;
-                }
+                receiveMessage(runAsHost,dataExchange,hostPlayer,clientPlayer,exchangeMessage,client);
             }
             //enviamos al server el msj "waiting" para indicar que el jugador actual
             //esta realizando sus movimientos y el otro este a la a espera
@@ -92,18 +80,9 @@ public class GameManager {
             //datos a playerManager
             //playerManager nos devuelve un booleano indicando si el juego termino
             //consultando si los jugadores enemigos estan muertos
-            if(runAsHost) {
-                if(hostPlayer.isFirstTurn()){
-                    dataExchange.setHostName(hostPlayer.getPlayerName());
-                    dataExchange.setClientName("enemigo");
-                }
-                gameOver = playerManager.turn(hostPlayer, clientPlayer);
-            } else {
-                if(clientPlayer.isFirstTurn()){
-                    dataExchange.setClientName(clientPlayer.getPlayerName());
-                }
-                gameOver = playerManager.turn(clientPlayer, hostPlayer);
-            }
+            setNamesToSend(runAsHost,hostPlayer,clientPlayer,dataExchange);
+            gameOver = playerManager.turn(clientPlayer, hostPlayer);
+
 
             //consultamos si el juego termino por eliminar a los jugadores enemigos
             //si el juego termina, entramos al metodo gameOver y desde ahi informamos
@@ -130,6 +109,19 @@ public class GameManager {
         //imprimimos mensaje y enviamos datos a cliente para finalizar la partida
         GameGraphics.gameOver();
 
+        showWinner(runAsHost,enemy,dataExchange);
+
+        sendData(dataExchange, host, enemy, true, server);
+        ConnectionGraphics.serverClosing();
+        GameGraphics.backToMainPage();
+        try{
+            Thread.sleep(10000);
+        }catch(Exception e){
+            e.getLocalizedMessage();
+        }
+    }
+
+    private static void showWinner(boolean runAsHost, Player enemy, DataExchange dataExchange){
         if(runAsHost){
             if(hostWon(enemy)){
                 GameGraphics.victory();
@@ -143,17 +135,7 @@ public class GameManager {
                 GameGraphics.lose(dataExchange.getHostName());
             }
         }
-
-        sendData(dataExchange, host, enemy, true, server);
-        ConnectionGraphics.serverClosing();
-        GameGraphics.backToMainPage();
-        try{
-            Thread.sleep(10000);
-        }catch(Exception e){
-            e.getLocalizedMessage();
-        }
     }
-
 
     public String waitingOponent(Client client){
 
@@ -162,7 +144,7 @@ public class GameManager {
     }
 
     private void printWaitingTurn(boolean runAsHost, DataExchange dataExchange, Player clientPlayer){
-        String clientName= dataExchange.getClientName();
+        String clientName = dataExchange.getClientName();
         String hostName=" ";
 
 
@@ -178,6 +160,7 @@ public class GameManager {
         }
     }
 
+
     //procesa los datos recibidos en json y nos devuelve un objeto DataExchange
     private DataExchange processData(String exchangeMessage, Player hostPlayer, Player clientPlayer) {
         return DataManager.processData(exchangeMessage,hostPlayer,clientPlayer);
@@ -186,6 +169,101 @@ public class GameManager {
     //envia los datos al servidor
     private static void sendData(DataExchange dataExchange, Player hostPlayer, Player clientPlayer, boolean gameOver, Server server) {
         ConnectionManager.sendData(dataExchange,hostPlayer,clientPlayer,gameOver,server);
+    }
+
+    public void singlePlay(){
+        final int pOne=1;
+        final int pTwo=2;
+        GameGraphics.enterPlayerName(pOne);
+        String namePlayerOne= EnterData.nextLine();
+        GameGraphics.enterPlayerName(pTwo);
+        String namePlayerTwo=EnterData.nextLine();
+        Player playerOne=new Player(namePlayerOne);
+        Player playerTwo=new Player(namePlayerTwo);
+        PlayerManager playerManager = new PlayerManager();
+
+        while(!gameOverSinglePlay(playerOne, playerTwo, playerManager));
+
+        if(playerOneLost(playerOne,playerManager)){
+            GameGraphics.playerWon(playerTwo.getPlayerName());
+
+        }
+        if(playerTwoLost(playerTwo,playerManager)){
+            GameGraphics.playerWon(playerOne.getPlayerName());
+
+        }
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    private static boolean gameOverSinglePlay(Player playerOne, Player playerTwo, PlayerManager playerManager) {
+        while(!playerManager.turn(playerOne, playerTwo) && !playerManager.turn(playerTwo,playerOne));
+        return true;
+    }
+
+    private static boolean playerOneLost(Player playerOne, PlayerManager playerManager){
+        return playerManager.mySoldiersAreDead(playerOne);
+    }
+
+    private static boolean playerTwoLost(Player playerTwo, PlayerManager playerManager){
+        return playerManager.mySoldiersAreDead(playerTwo);
+    }
+
+    private void receiveMessage(boolean runAsHost, DataExchange dataExchange,Player hostPlayer, Player clientPlayer,
+                             String exchangeMessage, Client client){
+        printWaitingTurn(runAsHost, dataExchange,clientPlayer);
+
+        //recibe un json del oponente
+        exchangeMessage = waitingOponent(client);
+
+        dataExchange = processData(exchangeMessage,hostPlayer,clientPlayer);
+        if(dataExchange.connectionLost()){
+            ConnectionGraphics.closeGameConectionLost();
+            GameGraphics.backToMainPage();
+            try{
+                Thread.sleep(5000);
+            }catch(Exception e){
+
+            }
+            return;
+        }
+    }
+
+    private void setNamesToSend(boolean runAsHost, Player hostPlayer, Player clientPlayer, DataExchange dataExchange){
+        if(runAsHost) {
+            if(hostPlayer.isFirstTurn()){
+                dataExchange.setHostName(hostPlayer.getPlayerName());
+                dataExchange.setClientName("enemigo");
+            }
+
+        } else {
+            if(clientPlayer.isFirstTurn()){
+                dataExchange.setClientName(clientPlayer.getPlayerName());
+            }
+
+        }
+    }
+
+    public String enterIp(boolean runAsHost){
+        boolean ipIsValid=false;
+        String oponentIp="";
+        while(!ipIsValid) {
+            //pedimos la ip del oponente
+            ConnectionGraphics.enterEnemyIp(runAsHost);
+            oponentIp = EnterData.nextLine();
+            //verificamos si la ip es valida
+            ipIsValid= IPValidator.ipIsValid(oponentIp);
+            if(!ipIsValid){
+                ConnectionGraphics.ipNotValid(oponentIp);
+            }
+        }
+        return oponentIp;
+
     }
 
 }

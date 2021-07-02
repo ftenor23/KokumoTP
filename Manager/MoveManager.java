@@ -1,6 +1,7 @@
 package TP_Bis.Manager;
 
 import TP_Bis.DataIn.EnterData;
+
 import TP_Bis.Graphic.MoveGraphics;
 import TP_Bis.entity.Player;
 import TP_Bis.entity.Soldier;
@@ -8,7 +9,8 @@ import TP_Bis.validator.MoveValidator;
 
 public class MoveManager {
     private final MoveValidator moveValidator = new MoveValidator();
-
+    private static final int MAX_MOVEMENT=5;//si nos movemos hacia arriba o abajo sumamos 5 grillas
+    private static final int MIN_MOVEMENT=1;//si nos movemos a izq o derecha, 1 sola
     public MoveValidator getMoveValidator() {
         return moveValidator;
     }
@@ -37,9 +39,36 @@ public class MoveManager {
     //soldado en la nueva posicion
     private void move(Player player, int position, int soldierId, int move){
         Soldier soldier = getSoldier(player,soldierId);
+        int newPosition=returnNewPosition(move,position);
+
+        if(!moveValidator.validPosition(newPosition)){
+            MoveGraphics.invalidMovement();
+            return;
+        }
+        if(occupiedPosition(player,newPosition)) {
+            MoveGraphics.positionOccupied();
+            return;
+        }
+        if(impassablePosition(player,newPosition)){
+            MoveGraphics.impassablePosition();
+            return;
+        }
+
+        emptyGrid(player,position);
+        setSoldierPosition(player,newPosition,soldier);
+
+    }
+
+    private boolean occupiedPosition(Player player, int newPosition){
+        return player.getBoard().getMatrix()[newPosition].isOccupied();
+    }
+
+    private boolean impassablePosition(Player player, int newPosition){
+        return player.getBoard().getMatrix()[newPosition].isImpassable();
+    }
+
+    private int returnNewPosition(int move, int position){
         int newPosition=-1;
-        final int MAX_MOVEMENT=5;//si nos movemos hacia arriba o abajo sumamos 5 grillas
-        final int MIN_MOVEMENT=1;//si nos movemos a izq o derecha, 1 sola
         switch (move){
             case 1:
                 newPosition=position-MAX_MOVEMENT; //se mueve hacia arriba
@@ -57,24 +86,8 @@ public class MoveManager {
                 MoveGraphics.error();
                 break;
         }
-        if(!moveValidator.validPosition(newPosition)){
-            MoveGraphics.invalidMovement();
-            return;
-        }
-        if(player.getBoard().getMatrix()[newPosition].isOccupied()) {
-            MoveGraphics.positionOccupied();
-            return;
-        }
-        if(player.getBoard().getMatrix()[newPosition].isImpassable()){
-            MoveGraphics.impassablePosition();
-            return;
-        }
-
-        emptyGrid(player,position);
-        setSoldierPosition(player,newPosition,soldier);
-
+        return newPosition;
     }
-
     private Soldier getSoldier(Player player, int soldierId){
         return SoldierManager.getSoldier(player,soldierId);
     }

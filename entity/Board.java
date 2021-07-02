@@ -19,7 +19,7 @@ public class Board {
     }
 
 
-    public int getNumberOfSoldiers() {
+    public static int getNumberOfSoldiers() {
         return NUMBER_OF_SOLDIERS;
     }
 
@@ -79,6 +79,7 @@ public class Board {
     public static int getBoardSize() {
         return BOARD_SIZE;
     }
+
 
 
 }
