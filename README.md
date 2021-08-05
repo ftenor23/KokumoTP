@@ -1,5 +1,9 @@
 # KokumoTP
 
+Kokumo es un juego online desarrollado bajo el protocolo http para dos jugadores. Uno debera iniciar como server y el otro como cliente, a traves de su ip publica.
+
+Reglas:
+
 Al inicio de la partida, cada jugador deberá posicionar sus tres ninjas dentro de una cuadrícula de 5 x 5 casilleros.
 En ningún momento el oponente deberá conocer las ubicaciones de las tropas enemigas; cada jugador verá dos cuadrículas:
 La cuadrícula principal, en la que se hallan desplegados sus ninjas.
